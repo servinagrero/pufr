@@ -1,14 +1,21 @@
 Package: pufr
 Type: Package
-Title: Tools For Analysis Of Physical Unclonable Functions (PUFs) And True Random Number Generators (TRNGs)
+Title: Tools For Analysis Of Physical Unclonable Functions (PUFs)
 Version: 0.1.0
 Author: Sergio Vinagrero
 Maintainer: Sergio Vinagrero <servinagrero@gmail.com>
 Description: Functions to analize metrics of Physical Unclonable Functions
-    as well as entropy and tests for True Random Number Generators.
+    commonly known as PUFs.
 License: MIT + file LICENSE
-URL: https://github.com/servinagrero/pufr
+URL: https://github.com/servinagrero/pufr,
+    https://servinagrero.github.io/pufr/
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 1.0.9)
+Imports: 
+    Rcpp
 LinkingTo: Rcpp
+RoxygenNote: 7.2.3
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
