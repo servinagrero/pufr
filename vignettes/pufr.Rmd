@@ -1,0 +1,30 @@
+---
+title: "Introduction to pufr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to pufr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Physical Unclonable Functions
+
+Physical Unclonable Functions, commonly knows as PUFs, are a mechanism that leverages the manufacture variability of devices to generate secrets.
+
+A PUF is interrogated by means of a `challenge` and it returns a `response`, normally a bit. A challenge and its corresponding response are called Challenge Response Pair(CRP). The set of all CRPs of a physical device is different from all CRPs of a different device.
+
+
+## Getting started
+
+This library can make use of `parallel` to make the computations faster. If the packet is installed, it is loaded and a context is created automatically.
+
+```{r setup}
+library(pufr)
+```

@@ -2,3 +2,21 @@ url: https://servinagrero.github.io/pufr/
 template:
   bootstrap: 5
   bootswatch: litera
+
+reference:
+  - title: Metrics
+    desc: >
+      Calculate the metrics of some CRPs or a CRP table
+    contents:
+    - crps_weight
+    - crps_uniqueness
+    - entropy_bits
+    - intra_hd
+  - title: Utilities
+    docs: >
+      Utility functions
+    contents:
+    - hamming_dist
+    - hamming_weight
+    - rbits
+    - ratio_bits

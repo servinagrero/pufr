@@ -5,7 +5,11 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-PUFr provides tools and algorithms for the analysis of Physical Unclonable Functions, commonly known as PUFs.
+## Overview
+
+Physical Unclonable Functions, commonly knows as PUFs, are a mechanism that leverages the manufacture variability of devices to generate secrets. PUFs can be used to identify devices or to generate secrets. This package provides functions and algorithms for their analysis and evaluation.
+
+You can learn more about PUFs and their evaluation in `vignette("pufr")`.
 
 ## Installation
 
