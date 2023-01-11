@@ -40,8 +40,8 @@ rbits <- function(size, prob = NULL) {
 #' ## Positive ratio
 #' ratio_bits(c(1, 1, 0))
 #'
-#' ## Works also on logical vectors
-#' ratio_bits(c(TRUE, FALSE, TRUE))
+#' ## `NA` are discarded
+#' ratio_bits(c(1, 0, NA))
 ratio_bits <- function(v) {
   n_ones <- hamming_weight(v)
   ((2 * n_ones) - length(v)) / length(v)
@@ -66,8 +66,8 @@ ratio_bits <- function(v) {
 #' ## Normalized weight
 #' hamming_weight(c(0, 1, 1), norm = TRUE)
 #'
-#' ## Works also on logical vectors
-#' hamming_weight(c(TRUE, TRUE, TRUE))
+#' ## `NA` are discarded
+#' hamming_weight(c(1, 0, NA))
 hamming_weight <- function(v, norm = FALSE) {
   weight <- sum(v, na.rm = TRUE)
   if (norm == TRUE) {

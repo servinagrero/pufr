@@ -26,8 +26,8 @@ ratio_bits(c(0, 1, 0))
 ## Positive ratio
 ratio_bits(c(1, 1, 0))
 
-## Works also on logical vectors
-ratio_bits(c(TRUE, FALSE, TRUE))
+## `NA` are discarded
+ratio_bits(c(1, 0, NA))
 }
 \seealso{
 \link[=hamming_weight]{hamming_weight}

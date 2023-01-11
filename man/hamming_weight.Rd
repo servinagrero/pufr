@@ -25,6 +25,6 @@ hamming_weight(c(0, 1, 1))
 ## Normalized weight
 hamming_weight(c(0, 1, 1), norm = TRUE)
 
-## Works also on logical vectors
-hamming_weight(c(TRUE, TRUE, TRUE))
+## `NA` are discarded
+hamming_weight(c(1, 0, NA))
 }
