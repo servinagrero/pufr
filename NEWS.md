@@ -1,3 +1,7 @@
+# pufr 0.2.1
+
+* Add `register_parallel` function to register a parallel cluster.
+
 # pufr 0.2.0
 
 * Add automatic detection of the `parallel` package to parallelize the computations.

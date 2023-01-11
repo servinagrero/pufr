@@ -14,7 +14,7 @@ The Shannon entropy of the vector
 }
 \description{
 The Shannon entropy of a vector is calculated as:
-\deqn{H(X) := -\sum_{x \in \chi} p(x) \cdot \log p(x) = \mathbb{E}[-\log p(x)]}
+\deqn{H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]}
 where \eqn{p(x)} refers to \eqn{p(0)} and \eqn{p(1)} in a binary vector.
 By convention, it is assumed that \eqn{0 \log 0 = 0} and \eqn{1 \log 1 = 1}.
 

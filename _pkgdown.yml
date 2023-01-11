@@ -18,5 +18,6 @@ reference:
     contents:
     - hamming_dist
     - hamming_weight
-    - rbits
     - ratio_bits
+    - rbits
+    - register_parallel

@@ -49,7 +49,6 @@ float hamming_dist(NumericVector x, NumericVector y, bool norm = false) {
 float crps_uniqueness(NumericMatrix crps) {
   float uniqueness = 0;
   int n_devices = crps.rows();
-  int n_crps = crps.cols();
   int n_pairs = 0;
 
   for(int i = 0; i < n_devices; ++i) {

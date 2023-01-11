@@ -1,12 +1,21 @@
-.onAttach <- function(libname, pkgname) {
-  if (requireNamespace("parallel", quietly = TRUE) & !exists(".ctx")) {
-    packageStartupMessage("* Registering parallel context")
-    .ctx <<- parallel::makeCluster(parallel::detectCores() - 2)
-  }
+
+.onLoad <- function(libname, pkgname) {
+  assign("pufr_env", new.env(), parent.env(environment()))
 }
 
-.onDetach <- function(libpath) {
-  if (exists(".ctx")) {
-    parallel::stopCluster(.ctx)
-  }
+#' Register a parallel cluster
+#'
+#' The user should create the cluster and close it.
+#'
+#' @param ctx A cluster created with [parallel::makeCluster()]
+#'
+#' @export
+#' @seealso [parallel::makeCluster()]
+#' @examples
+#' \dontrun{
+#' ctx <- parallel::makeCluster(2)
+#' register_parallel(ctx)
+#' }
+register_parallel <- function(ctx) {
+  pufr_env$ctx <- ctx
 }

@@ -8,7 +8,7 @@ NULL
 #'
 #' @description
 #' The Shannon entropy of a vector is calculated as:
-#' \deqn{H(X) := -\sum_{x \in \chi} p(x) \cdot \log p(x) = \mathbb{E}[-\log p(x)]}
+#' \deqn{H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]}
 #' where \eqn{p(x)} refers to \eqn{p(0)} and \eqn{p(1)} in a binary vector.
 #' By convention, it is assumed that \eqn{0 \log 0 = 0} and \eqn{1 \log 1 = 1}.
 #'
@@ -81,8 +81,13 @@ crps_weight <- function(crps, axis = 1) {
     if (!(axis %in% c(1, 2))) {
       cli::cli_abort("axis can only be 1 or 2, not {axis}")
     }
-    if (exists(".ctx")) {
-      return(parallel::parApply(.ctx, crps, axis, hamming_weight, norm = TRUE))
+    if (!is.null(pufr_env$ctx)) {
+      return(
+        parallel::parApply(
+          pufr_env$ctx, crps, axis, hamming_weight,
+          norm = TRUE
+        )
+      )
     } else {
       return(apply(crps, axis, hamming_weight, norm = TRUE))
     }
@@ -120,10 +125,18 @@ intra_hd <- function(crps, ref_sample = 1) {
       cli::cli_abort("ref_sample should be in the range [1, {nrow(crps)}]")
     }
     sample_ids <- setdiff(seq_len(ncrps), ref_sample)
-    dists <- sapply(
-      sample_ids,
-      function(i) hamming_dist(crps[ref_sample, ], crps[i, ], norm = TRUE)
-    )
+    intra_hd_fn <- function(i) {
+      hamming_dist(crps[ref_sample, ], crps[i, ], norm = TRUE)
+    }
+
+    if (!is.null(pufr_env$ctx)) {
+      dists <- parallel::parLapply(
+        pufr_env$ctx, sample_ids, intra_hd_fn,
+        norm = TRUE
+      )
+    } else {
+      dists <- vapply(sample_ids, intra_hd_fn, numeric(1))
+    }
     return(dists)
   } else if (is.array(crps)) {
     return(rowSums(crps, dims = 2))

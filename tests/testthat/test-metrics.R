@@ -69,7 +69,7 @@ test_that("intra_hd throw an error with an invalid input", {
 })
 
 test_that("crps_uniqueness works", {
-  mat <- matrix(rbits(50), nrow = 5, ncol = 10)
+  mat <- matrix(rbits(500), nrow = 5, ncol = 100)
   hd <- crps_uniqueness(mat)
 
   expect_lt((mean(hd) - 0.5), 0.1)
