@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">pufr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,14 +18,14 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
+  <a class="nav-link" href="../articles/pufr.html">Get started</a>
+</li>
+<li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/index.html">index</a>
-  </div>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -47,7 +47,38 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a></h2>
+      
+      <p class="section-desc"></p><p>Calculate the metrics of some CRPs or a CRP table</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
+          
+          <code><a href="crps_weight.html">crps_weight()</a></code> 
+        </dt>
+        <dd>Hamming weight of CRPs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="crps_uniqueness.html">crps_uniqueness()</a></code> <code><a href="crps_uniqueness.html">inter_hd()</a></code> 
+        </dt>
+        <dd>Uniqueness of CRPs</dd>
+      </dl><dl><dt>
+          
+          <code><a href="entropy_bits.html">entropy_bits()</a></code> 
+        </dt>
+        <dd>Shannon entropy optimized for binary vectors</dd>
+      </dl><dl><dt>
+          
+          <code><a href="intra_hd.html">intra_hd()</a></code> 
+        </dt>
+        <dd>Intra Hamming distance of CRPs</dd>
+      </dl></div><div class="section level2">
+      <h2 id="utilities">Utilities<a class="anchor" aria-label="anchor" href="#utilities"></a></h2>
       
       
 
@@ -59,11 +90,6 @@
 
       <dl><dt>
           
-          <code><a href="entropy_lgl.html">entropy_lgl()</a></code> 
-        </dt>
-        <dd>Optimized Shannon entropy for logical vectors</dd>
-      </dl><dl><dt>
-          
           <code><a href="hamming_dist.html">hamming_dist()</a></code> 
         </dt>
         <dd>Hamming distance of two vectors</dd>
@@ -71,19 +97,25 @@
           
           <code><a href="hamming_weight.html">hamming_weight()</a></code> 
         </dt>
-        <dd>Hamming weight of a vector</dd>
+        <dd>Hamming weight of a binary vector</dd>
       </dl><dl><dt>
           
           <code><a href="ratio_bits.html">ratio_bits()</a></code> 
         </dt>
-        <dd>Ratio of bits in a vector</dd>
+        <dd>Ratio of bits in a binary vector</dd>
       </dl><dl><dt>
           
-          <code><a href="uniqueness.html">uniqueness()</a></code> 
+          <code><a href="rbits.html">rbits()</a></code> 
         </dt>
-        <dd>Uniqueness of a CRP table</dd>
+        <dd>Random binary vector</dd>
+      </dl><dl><dt>
+          
+          <code><a href="register_parallel.html">register_parallel()</a></code> 
+        </dt>
+        <dd>Register a parallel cluster</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
