@@ -13,3 +13,8 @@ test_that("ratio_bits handles `NA`", {
   ratio <- ratio_bits(v)
   expect_lt(ratio, 0.3)
 })
+
+test_that("ratio_bits discards `NA`", {
+  ratio <- ratio_bits(c(1, 0, 1, NA, NA), na.rm = TRUE)
+  expect_equal(ratio, 1 / 3)
+})

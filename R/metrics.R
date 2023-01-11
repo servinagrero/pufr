@@ -22,6 +22,7 @@ NULL
 #' @seealso [hamming_weight][pufr::hamming_weight]
 #' @examples
 #' entropy_bits(c(0, 0, 0))
+#' entropy_bits(c(1, 1, 1))
 #' entropy_bits(rbits(20))
 entropy_bits <- function(v) {
   p_ones <- hamming_weight(v, norm = TRUE)
@@ -45,19 +46,18 @@ entropy_bits <- function(v) {
 #' @details
 #' ### Uniformity
 #'
-#' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity `axis` should be 1.
+#' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, `axis` should be 1.
 #'
 #' \deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
 #'
 #' ### Bitaliasing
 #'
-#' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing `axis` should be 2.
+#' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, `axis` should be 2.
 #'
 #' \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
 #'
 #' @param crps A binary vector or 2D matrix.
-#' @param axis The axis to calculate the Hamming weight.
-#'  1 for rows and 2 for columns.
+#' @param axis The axis to calculate the Hamming weight. 1 for rows and 2 for columns.
 #'
 #' @return The Hamming weight of the CRPs
 #' @export
@@ -92,7 +92,7 @@ crps_weight <- function(crps, axis = 1) {
       return(apply(crps, axis, hamming_weight, norm = TRUE))
     }
   }
-  cli::cli_abort("crps needs to be a vector or a 2D matrix")
+  cli::cli_abort("crps needs to be a vector or a 2D matrix, not {.type {crps}}")
 }
 
 
@@ -103,10 +103,16 @@ crps_weight <- function(crps, axis = 1) {
 #'
 #' A response is reliable if it does not change in time, thus, its intra Hamming distance is equal to 0.
 #'
+#' If `crps` is a 2D matrix, it is assumed that each row corresponds to a sample and each column to a CRP. The `ref_sample` will say which row is the sample taken as reference.
+#' In the case of a 3D matrix, each row corresponds to a device, each column to a CRP and each 3rd dimension to a different sample.
+#'
+#' The order of the samples is calculated as \code{setdiff(seq_len(nsamples), ref_sample)} where nsamples corresponds to \code{nrow(crps)} in the case of a 2D matrix and \code{dim(crps)[3]} in the case of a 3D matrix.
+#'
 #' @param crps A binary 2D matrix or 3D array
 #' @param ref_sample Row of the 2D matrix used as reference CRPs
 #'
-#' @return The average intra Hamming distance
+#' @return If `crps` is a 2D matrix, a vector of size \code{nrow(crps) - 1}. If `crps` is a 3D array, a 2D matrix where each row contains the intra Hamming distance of the samples for that device.
+#'
 #' @export
 #' @seealso [hamming_dist][pufr::hamming_dist]
 #'
@@ -117,32 +123,33 @@ crps_weight <- function(crps, axis = 1) {
 #'
 #' ## Set of devices with their respective samples
 #' mat <- array(rbits(10 * 50 * 3), dim = c(10, 50, 3))
-#' colMeans(intra_hd(mat))
+#' intra_hd(mat)
 intra_hd <- function(crps, ref_sample = 1) {
   if (is.matrix(crps)) {
-    ncrps <- nrow(crps)
-    if (!(ref_sample %in% seq_len(ncrps))) {
+    nsamples <- nrow(crps)
+    if (!(ref_sample %in% seq_len(nsamples))) {
       cli::cli_abort("ref_sample should be in the range [1, {nrow(crps)}]")
     }
-    sample_ids <- setdiff(seq_len(ncrps), ref_sample)
+    sample_ids <- setdiff(seq_len(nsamples), ref_sample)
     intra_hd_fn <- function(i) {
       hamming_dist(crps[ref_sample, ], crps[i, ], norm = TRUE)
     }
 
     if (!is.null(pufr_env$ctx)) {
-      dists <- parallel::parLapply(
-        pufr_env$ctx, sample_ids, intra_hd_fn,
-        norm = TRUE
-      )
+      return(parallel::parSapply(
+        pufr_env$ctx, sample_ids, intra_hd_fn
+      ))
     } else {
-      dists <- vapply(sample_ids, intra_hd_fn, numeric(1))
+      return(vapply(sample_ids, intra_hd_fn, numeric(1)))
     }
-    return(dists)
   } else if (is.array(crps)) {
-    return(rowSums(crps, dims = 2))
+    return(t(apply(crps, 1, function(samples) {
+      intra_hd(t(samples), ref_sample = ref_sample)
+    })))
   }
   cli::cli_abort("crps should be a 2D matrix or 3D array, not {.type {crps}}")
 }
 
 #' @rdname crps_uniqueness
+#' @export
 inter_hd <- crps_uniqueness

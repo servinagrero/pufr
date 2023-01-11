@@ -1,3 +1,9 @@
+# pufr 0.3.0
+
+* `crps_uniqueness` now returns a list of values instead of the average uniqueness. (#1)
+* `intra_hd` returns a 2D matrix if the argument supplied is a 3D array.
+* Added `%<>%` and `%</>%` operators for hamming distance.
+
 # pufr 0.2.1
 
 * Add `register_parallel` function to register a parallel cluster.
