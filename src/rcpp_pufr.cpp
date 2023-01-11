@@ -18,7 +18,7 @@ float hamming_dist(NumericVector x, NumericVector y, bool norm = false) {
   float dist = 0;
 
   if (x.length() != y.length()) {
-    throw std::runtime_error("x and y need to have the same length.");
+    throw std::runtime_error("x and y don't have the same length");
   }
   for (int i = 0; i < x.length(); ++i) {
     if (x[i] != y[i]) {
@@ -33,9 +33,21 @@ float hamming_dist(NumericVector x, NumericVector y, bool norm = false) {
   }
 }
 
+int binom(int n) {
+  if (n <= 2) {
+    return(n);
+  } else {
+    return(R::gammafn(n + 1.0) / (2 * R::gammafn((n - 2) + 1.0)));
+  }
+}
+
 //' Uniqueness of CRPs
 //'
 //' The uniqueness is calculated as the average of the hamming distance of the CRPs of two devices, for every pair of devices.
+//'
+//' The number of pairs of devices is calculated as:
+//' \deqn{N = \binom{D}{2} = \frac{D!}{2 \cdot (D - 2)!}}
+//' where D represents the number of devices.
 //'
 //' @param crps A logical or numeric matrix
 //'
@@ -46,16 +58,17 @@ float hamming_dist(NumericVector x, NumericVector y, bool norm = false) {
 //' mat <- matrix(sample(c(0, 1, 100, replace = TRUE)), nrow = 10, ncol = 10)
 //' crps_uniqueness(mat)
 // [[Rcpp::export]]
-float crps_uniqueness(NumericMatrix crps) {
-  float uniqueness = 0;
+NumericVector crps_uniqueness(NumericMatrix crps) {
   int n_devices = crps.rows();
-  int n_pairs = 0;
+  NumericVector interHDs(binom(n_devices));
+  int pair_count = 0;
+  float hd;
 
   for(int i = 0; i < n_devices; ++i) {
     for(int j = i + 1; j < n_devices; ++j) {
-      uniqueness += 1 - ((float)hamming_dist(crps.row(i), crps.row(j), true));
-      n_pairs++;
+      hd = 1 - ((float)hamming_dist(crps.row(i), crps.row(j), true));
+      interHDs[pair_count++] = hd;
     }
   }
-  return (uniqueness / n_pairs);
+  return interHDs;
 }

@@ -22,6 +22,7 @@ The probability \eqn{p(1)} corresponds to the normalized \link{hamming_weight} o
 }
 \examples{
 entropy_bits(c(0, 0, 0))
+entropy_bits(c(1, 1, 1))
 entropy_bits(rbits(20))
 }
 \seealso{

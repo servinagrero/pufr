@@ -18,35 +18,6 @@ rbits <- function(size, prob = NULL) {
   sample(c(0, 1), size, replace = TRUE, prob)
 }
 
-#' Ratio of bits in a binary vector
-#'
-#' @description
-#' The ratio is calculated as the number of 1s minus the number of 0s. A positive ratio indicates that there are more 1s than 0s, while a negative results indicates the opposite.
-#'
-#' By using the [hamming_weight][pufr::hamming_weight] function, the ratio can be calculated in the following way.
-#' \deqn{Ratio = \frac{HW(v) - (\#v - HW(v))}{\#v} = \frac{2 HW(v)}{\#v}- 1}
-#' The operator \eqn{\#v} denotes the number of elements in the vector \eqn{v}.
-#'
-#' @param v A logical or numeric vector
-#'
-#' @return The ratio of bits in the binary vector
-#'
-#' @export
-#' @seealso [hamming_weight][pufr::hamming_weight]
-#' @examples
-#' ## Negative ratio
-#' ratio_bits(c(0, 1, 0))
-#'
-#' ## Positive ratio
-#' ratio_bits(c(1, 1, 0))
-#'
-#' ## `NA` are discarded
-#' ratio_bits(c(1, 0, NA))
-ratio_bits <- function(v) {
-  n_ones <- hamming_weight(v)
-  ((2 * n_ones) - length(v)) / length(v)
-}
-
 #' Hamming weight of a binary vector
 #'
 #' @description
@@ -76,3 +47,56 @@ hamming_weight <- function(v, norm = FALSE) {
     return(weight)
   }
 }
+
+#' Ratio of bits in a binary vector
+#'
+#' @description
+#' The ratio is calculated as the number of 1s minus the number of 0s. A positive ratio indicates that there are more 1s than 0s, while a negative results indicates the opposite. `NA` by default are accounted to calculate the length of the vector. They can be discarded by using the argument `na.rm`.
+#'
+#' By using the [hamming_weight][pufr::hamming_weight] function, the ratio can be calculated in the following way.
+#' \deqn{Ratio = \frac{HW(v) - (\#v - HW(v))}{\#v} = \frac{2 HW(v)}{\#v}- 1}
+#' The operator \eqn{\#v} denotes the number of elements in the vector \eqn{v}.
+#'
+#' @param v A binary vector
+#' @param na.rm If `TRUE` (default is `FALSE`) don't account `NA` for the length of the vector
+#'
+#' @return The ratio of bits in the binary vector
+#'
+#' @export
+#' @seealso [hamming_weight][pufr::hamming_weight]
+#' @examples
+#' ## Negative ratio
+#' ratio_bits(c(0, 1, 0))
+#'
+#' ## Positive ratio
+#' ratio_bits(c(1, 1, 0))
+#'
+#' ## `NA` are accounted for the length
+#' ratio_bits(c(1, 1, 0, NA, NA))
+#'
+#' #' ## `NA` are discarded
+#' ratio_bits(c(1, 1, 0, NA, NA), na.rm = TRUE)
+ratio_bits <- function(v, na.rm = FALSE) {
+  if (na.rm == TRUE) {
+    bits <- v[!is.na(v)]
+    n_ones <- hamming_weight(bits)
+    size <- length(bits)
+  } else {
+    n_ones <- hamming_weight(v)
+    size <- length(v)
+  }
+  return(((2 * n_ones) - size) / size)
+}
+
+
+#' @rdname hamming_dist
+#' @export
+#' @examples
+#' c(0, 1, 0) %<>% c(1, 0, 0)
+'%<>%' <- function(x, y) hamming_dist(x, y, norm = FALSE)
+
+#' @rdname hamming_dist
+#' @export
+#' @examples
+#' c(0, 1, 0) %</>% c(1, 0, 0)
+'%</>%' <- function(x, y) hamming_dist(x, y, norm = TRUE)

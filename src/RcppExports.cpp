@@ -24,7 +24,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // crps_uniqueness
-float crps_uniqueness(NumericMatrix crps);
+NumericVector crps_uniqueness(NumericMatrix crps);
 RcppExport SEXP _pufr_crps_uniqueness(SEXP crpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
