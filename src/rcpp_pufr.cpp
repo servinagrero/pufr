@@ -33,7 +33,7 @@ float hamming_dist(NumericVector x, NumericVector y, bool norm = false) {
   }
 }
 
-//' Uniqueness of a CRP table
+//' Uniqueness of CRPs
 //'
 //' The uniqueness is calculated as the average of the hamming distance of the CRPs of two devices, for every pair of devices.
 //'
@@ -44,12 +44,11 @@ float hamming_dist(NumericVector x, NumericVector y, bool norm = false) {
 //' @export
 //' @examples
 //' mat <- matrix(sample(c(0, 1, 100, replace = TRUE)), nrow = 10, ncol = 10)
-//' uniqueness(mat)
+//' crps_uniqueness(mat)
 // [[Rcpp::export]]
-float uniqueness(NumericMatrix crps) {
+float crps_uniqueness(NumericMatrix crps) {
   float uniqueness = 0;
   int n_devices = crps.rows();
-  int n_crps = crps.cols();
   int n_pairs = 0;
 
   for(int i = 0; i < n_devices; ++i) {

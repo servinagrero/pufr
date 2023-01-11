@@ -1,21 +1,26 @@
 Package: pufr
 Type: Package
 Title: Tools For Analysis Of Physical Unclonable Functions (PUFs)
-Version: 0.1.0
+Version: 0.2.1
 Author: Sergio Vinagrero
 Maintainer: Sergio Vinagrero <servinagrero@gmail.com>
-Description: Functions to analize metrics of Physical Unclonable Functions
-    commonly known as PUFs.
+Description: Functions and algorithms for the analysis and evaluation of Physical Unclonable Functions (PUFs).
 License: MIT + file LICENSE
 URL: https://github.com/servinagrero/pufr,
     https://servinagrero.github.io/pufr/
+BugReports: https://servinagrero.github.io/pufr/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    cli,
     Rcpp
 LinkingTo: Rcpp
 RoxygenNote: 7.2.3
+Enhances: parallel
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)

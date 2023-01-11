@@ -11,7 +11,7 @@ hamming_dist(x, y, norm = FALSE)
 
 \item{y}{A numeric or logical vector}
 
-\item{norm}{If `TRUE` (default is `FALSE`) normalize the distance to the vector length}
+\item{norm}{If \code{TRUE} (default is \code{FALSE}) normalize the distance to the vector length}
 }
 \value{
 The hamming distance

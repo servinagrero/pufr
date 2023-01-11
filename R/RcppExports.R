@@ -17,7 +17,7 @@ hamming_dist <- function(x, y, norm = FALSE) {
     .Call(`_pufr_hamming_dist`, x, y, norm)
 }
 
-#' Uniqueness of a CRP table
+#' Uniqueness of CRPs
 #'
 #' The uniqueness is calculated as the average of the hamming distance of the CRPs of two devices, for every pair of devices.
 #'
@@ -28,8 +28,8 @@ hamming_dist <- function(x, y, norm = FALSE) {
 #' @export
 #' @examples
 #' mat <- matrix(sample(c(0, 1, 100, replace = TRUE)), nrow = 10, ncol = 10)
-#' uniqueness(mat)
-uniqueness <- function(crps) {
-    .Call(`_pufr_uniqueness`, crps)
+#' crps_uniqueness(mat)
+crps_uniqueness <- function(crps) {
+    .Call(`_pufr_crps_uniqueness`, crps)
 }
 
