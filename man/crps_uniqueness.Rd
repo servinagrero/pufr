@@ -17,8 +17,6 @@ The uniqueness of the CRP table
 }
 \description{
 The uniqueness is calculated as the average of the hamming distance of the CRPs of two devices, for every pair of devices.
-}
-\details{
 The number of pairs of devices is calculated as:
 \deqn{N = \binom{D}{2} = \frac{D!}{2 \cdot (D - 2)!}}
 where D represents the number of devices.

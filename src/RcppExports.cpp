@@ -10,33 +10,19 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// hamming_dist
-float hamming_dist(NumericVector x, NumericVector y, bool norm);
-RcppExport SEXP _pufr_hamming_dist(SEXP xSEXP, SEXP ySEXP, SEXP normSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
-    Rcpp::traits::input_parameter< bool >::type norm(normSEXP);
-    rcpp_result_gen = Rcpp::wrap(hamming_dist(x, y, norm));
-    return rcpp_result_gen;
-END_RCPP
-}
 // crps_uniqueness
-NumericVector crps_uniqueness(NumericMatrix crps);
+NumericVector crps_uniqueness(const NumericMatrix& crps);
 RcppExport SEXP _pufr_crps_uniqueness(SEXP crpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type crps(crpsSEXP);
+    Rcpp::traits::input_parameter< const NumericMatrix& >::type crps(crpsSEXP);
     rcpp_result_gen = Rcpp::wrap(crps_uniqueness(crps));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_pufr_hamming_dist", (DL_FUNC) &_pufr_hamming_dist, 3},
     {"_pufr_crps_uniqueness", (DL_FUNC) &_pufr_crps_uniqueness, 1},
     {NULL, NULL, 0}
 };

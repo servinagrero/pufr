@@ -58,6 +58,7 @@ entropy_bits <- function(v) {
 #'
 #' @param crps A binary vector or 2D matrix.
 #' @param axis The axis to calculate the Hamming weight. 1 for rows and 2 for columns.
+#' @param weight_fn Function used to calculate the weight of the CRPs
 #'
 #' @return The Hamming weight of the CRPs
 #' @export
@@ -78,23 +79,10 @@ crps_weight <- function(crps, axis = 1) {
   if (is.vector(crps)) {
     return(hamming_weight(crps, norm = TRUE))
   } else if (is.matrix(crps)) {
-    if (!(axis %in% c(1, 2))) {
-      cli::cli_abort("axis can only be 1 or 2, not {axis}")
-    }
-    if (!is.null(pufr_env$ctx)) {
-      return(
-        parallel::parApply(
-          pufr_env$ctx, crps, axis, hamming_weight,
-          norm = TRUE
-        )
-      )
-    } else {
-      return(apply(crps, axis, hamming_weight, norm = TRUE))
-    }
+    return(par_apply(crps, axis, hamming_weight, norm = TRUE))
   }
   cli::cli_abort("crps needs to be a vector or a 2D matrix, not {.type {crps}}")
 }
-
 
 #' Intra Hamming distance of CRPs
 #'
@@ -134,16 +122,9 @@ intra_hd <- function(crps, ref_sample = 1) {
     intra_hd_fn <- function(i) {
       hamming_dist(crps[ref_sample, ], crps[i, ], norm = TRUE)
     }
-
-    if (!is.null(pufr_env$ctx)) {
-      return(parallel::parSapply(
-        pufr_env$ctx, sample_ids, intra_hd_fn
-      ))
-    } else {
-      return(vapply(sample_ids, intra_hd_fn, numeric(1)))
-    }
+    return(par_vapply(sample_ids, intra_hd_fn, numeric(1)))
   } else if (is.array(crps)) {
-    return(t(apply(crps, 1, function(samples) {
+    return(t(par_apply(crps, 1, function(samples) {
       intra_hd(t(samples), ref_sample = ref_sample)
     })))
   }
