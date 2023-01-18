@@ -58,7 +58,6 @@ entropy_bits <- function(v) {
 #'
 #' @param crps A binary vector or 2D matrix.
 #' @param axis The axis to calculate the Hamming weight. 1 for rows and 2 for columns.
-#' @param weight_fn Function used to calculate the weight of the CRPs
 #'
 #' @return The Hamming weight of the CRPs
 #' @export

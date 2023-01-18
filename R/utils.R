@@ -32,6 +32,7 @@ rbits <- function(size, prob = NULL) {
 #' hamming_dist(c(0, 1, 0), c(0, 0, 0), norm = TRUE)
 #' @export
 hamming_dist <- function(x, y, norm = FALSE) {
+  stopifnot(length(x) == length(y))
   hd <- sum(x != y, na.rm = TRUE)
   `if`(norm, hd / length(x), hd)
 }

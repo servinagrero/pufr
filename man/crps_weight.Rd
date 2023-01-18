@@ -10,8 +10,6 @@ crps_weight(crps, axis = 1)
 \item{crps}{A binary vector or 2D matrix.}
 
 \item{axis}{The axis to calculate the Hamming weight. 1 for rows and 2 for columns.}
-
-\item{weight_fn}{Function used to calculate the weight of the CRPs}
 }
 \value{
 The Hamming weight of the CRPs
