@@ -20,4 +20,6 @@ reference:
     - hamming_weight
     - ratio_bits
     - rbits
+    - par_apply
+    - par_vapply
     - register_parallel

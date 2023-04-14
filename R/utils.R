@@ -19,6 +19,25 @@ rbits <- function(size, prob = NULL) {
   sample(c(0, 1), size, replace = TRUE, prob)
 }
 
+#' Hamming distance of two vectors
+#'
+#' @param x A numeric or logical vector
+#' @param y A numeric or logical vector
+#' @param norm If `TRUE` (default is `FALSE`) normalize the distance to the vector length
+#'
+#' @return The hamming distance
+#'
+#' @export
+#' @examples
+#' hamming_dist(c(0, 1, 0), c(0, 0, 0))
+#' hamming_dist(c(0, 1, 0), c(0, 0, 0), norm = TRUE)
+#' @export
+hamming_dist <- function(x, y, norm = FALSE) {
+  stopifnot(length(x) == length(y))
+  hd <- sum(x != y, na.rm = TRUE)
+  `if`(norm, hd / length(x), hd)
+}
+
 #' Hamming weight of a binary vector
 #'
 #' @description
@@ -42,11 +61,7 @@ rbits <- function(size, prob = NULL) {
 #' hamming_weight(c(1, 0, NA))
 hamming_weight <- function(v, norm = FALSE) {
   weight <- sum(v, na.rm = TRUE)
-  if (norm == TRUE) {
-    return(weight / length(v))
-  } else {
-    return(weight)
-  }
+  `if`(norm, weight / length(v), weight)
 }
 
 #' Ratio of bits in a binary vector
@@ -103,3 +118,33 @@ ratio_bits <- function(v, na.rm = FALSE) {
 #' @examples
 #' c(0, 1, 0) %</>% c(1, 0, 0)
 "%</>%" <- function(x, y) hamming_dist(x, y, norm = TRUE)
+
+#' Automatic parallelization of apply
+#'
+#' Use [parallel::parApply] if a parallel context has been created with [register_parallel]. Otherwise use [base::apply].
+#'
+#' @inheritParams base::apply
+#' @seealso [register_parallel], [parallel::parApply]
+#' @export
+par_apply <- function(X, MARGIN, FUN, ...) {
+  if (!is.null(pufr_env$ctx)) {
+    parallel::parApply(pufr_env$ctx, X, MARGIN, FUN, ...)
+  } else {
+    apply(X, MARGIN, FUN, ...)
+  }
+}
+
+#' Automatic parallelization of vapply
+#'
+#' #' Use [parallel::parApply] if a parallel context has been created with [register_parallel]. Otherwise use [base::apply].
+#'
+#' @inheritParams base::vapply
+#' @seealso [register_parallel], [parallel::parSapply]
+#' @export
+par_vapply <- function(X, FUN, FUN.VALUE = NULL, ...) {
+  if (!is.null(pufr_env$ctx)) {
+    parallel::parSapply(pufr_env$ctx, X, FUN, ...)
+  } else {
+    vapply(X, FUN, FUN.VALUE, ...)
+  }
+}

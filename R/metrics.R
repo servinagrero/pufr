@@ -78,23 +78,10 @@ crps_weight <- function(crps, margin = 1) {
   if (is.vector(crps)) {
     return(hamming_weight(crps, norm = TRUE))
   } else if (is.matrix(crps)) {
-    if (!(margin %in% c(1, 2))) {
-      cli::cli_abort("margin can only be 1 or 2, not {margin}")
-    }
-    if (!is.null(pufr_env$ctx)) {
-      return(
-        parallel::parApply(
-          pufr_env$ctx, crps, margin, hamming_weight,
-          norm = TRUE
-        )
-      )
-    } else {
-      return(apply(crps, margin, hamming_weight, norm = TRUE))
-    }
+    return(par_apply(crps, margin, hamming_weight, norm = TRUE))
   }
   cli::cli_abort("crps needs to be a vector or a 2D matrix, not {.type {crps}}")
 }
-
 
 #' Intra Hamming distance of CRPs
 #'
@@ -134,16 +121,9 @@ intra_hd <- function(crps, ref_sample = 1) {
     intra_hd_fn <- function(i) {
       hamming_dist(crps[ref_sample, ], crps[i, ], norm = TRUE)
     }
-
-    if (!is.null(pufr_env$ctx)) {
-      return(parallel::parSapply(
-        pufr_env$ctx, sample_ids, intra_hd_fn
-      ))
-    } else {
-      return(vapply(sample_ids, intra_hd_fn, numeric(1)))
-    }
+    return(par_vapply(sample_ids, intra_hd_fn, numeric(1)))
   } else if (is.array(crps)) {
-    return(t(apply(crps, 1, function(samples) {
+    return(t(par_apply(crps, 1, function(samples) {
       intra_hd(t(samples), ref_sample = ref_sample)
     })))
   }
