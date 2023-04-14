@@ -3,7 +3,8 @@
 #' This function is a wrapper around [sample] to generate binary vectors.
 #'
 #' @param size The size of the vector
-#' @param prob A numeric vector with 2 values for the probabilities of `0` and `1` respectively. By default the probabilities are `0.5` each.
+#' @param prob A numeric vector with 2 values for the probabilities of `0` and `1` respectively.
+#'     By default the probabilities are `0.5` each.
 #'
 #' @return The generated binary vector
 #' @export
@@ -51,14 +52,16 @@ hamming_weight <- function(v, norm = FALSE) {
 #' Ratio of bits in a binary vector
 #'
 #' @description
-#' The ratio is calculated as the number of 1s minus the number of 0s. A positive ratio indicates that there are more 1s than 0s, while a negative results indicates the opposite. `NA` by default are accounted to calculate the length of the vector. They can be discarded by using the argument `na.rm`.
+#' The ratio is calculated as the number of 1s minus the number of 0s. 
+#' A positive ratio indicates that there are more 1s than 0s, while a negative results indicates the opposite. 
+#' '`NA` by default are accounted to calculate the length of the vector. They can be discarded by using the argument `na.rm`.
 #'
 #' By using the [hamming_weight][pufr::hamming_weight] function, the ratio can be calculated in the following way.
 #' \deqn{Ratio = \frac{HW(v) - (\#v - HW(v))}{\#v} = \frac{2 HW(v)}{\#v}- 1}
 #' The operator \eqn{\#v} denotes the number of elements in the vector \eqn{v}.
 #'
 #' @param v A binary vector
-#' @param na.rm If `TRUE` (default is `FALSE`) don't account `NA` for the length of the vector
+#' @param na.rm If `TRUE` (default is `FALSE`) don't account `NA` for the length of the vector.
 #'
 #' @return The ratio of bits in the binary vector
 #'
@@ -93,10 +96,10 @@ ratio_bits <- function(v, na.rm = FALSE) {
 #' @export
 #' @examples
 #' c(0, 1, 0) %<>% c(1, 0, 0)
-'%<>%' <- function(x, y) hamming_dist(x, y, norm = FALSE)
+"%<>%" <- function(x, y) hamming_dist(x, y, norm = FALSE)
 
 #' @rdname hamming_dist
 #' @export
 #' @examples
 #' c(0, 1, 0) %</>% c(1, 0, 0)
-'%</>%' <- function(x, y) hamming_dist(x, y, norm = TRUE)
+"%</>%" <- function(x, y) hamming_dist(x, y, norm = TRUE)

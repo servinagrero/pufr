@@ -41,23 +41,23 @@ entropy_bits <- function(v) {
 #' @description
 #' This function is a wrapper around [hamming_weight][pufr::hamming_weight] to be used on vectors and 2D matrix.
 #'
-#' This function assumes that if the CRPs are supplied in a 2D matrix, each row corresponds to a device and each column corresponds to a CRP. If another convetion is used, modify the parameter `axis` accordingly.
+#' This function assumes that if the CRPs are supplied in a 2D matrix, each row corresponds to a device and each column corresponds to a CRP. If another convetion is used, modify the parameter `margin` accordingly.
 #'
 #' @details
 #' ### Uniformity
 #'
-#' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, `axis` should be 1.
+#' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, `margin` should be 1.
 #'
 #' \deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
 #'
 #' ### Bitaliasing
 #'
-#' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, `axis` should be 2.
+#' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, `margin` should be 2.
 #'
 #' \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
 #'
 #' @param crps A binary vector or 2D matrix.
-#' @param axis The axis to calculate the Hamming weight. 1 for rows and 2 for columns.
+#' @param margin The margin to calculate the Hamming weight. 1 for rows and 2 for columns.
 #'
 #' @return The Hamming weight of the CRPs
 #' @export
@@ -74,22 +74,22 @@ entropy_bits <- function(v) {
 #'
 #' ## Bitaliasing of a set of CRPs
 #' crps_weight(mat, 2)
-crps_weight <- function(crps, axis = 1) {
+crps_weight <- function(crps, margin = 1) {
   if (is.vector(crps)) {
     return(hamming_weight(crps, norm = TRUE))
   } else if (is.matrix(crps)) {
-    if (!(axis %in% c(1, 2))) {
-      cli::cli_abort("axis can only be 1 or 2, not {axis}")
+    if (!(margin %in% c(1, 2))) {
+      cli::cli_abort("margin can only be 1 or 2, not {margin}")
     }
     if (!is.null(pufr_env$ctx)) {
       return(
         parallel::parApply(
-          pufr_env$ctx, crps, axis, hamming_weight,
+          pufr_env$ctx, crps, margin, hamming_weight,
           norm = TRUE
         )
       )
     } else {
-      return(apply(crps, axis, hamming_weight, norm = TRUE))
+      return(apply(crps, margin, hamming_weight, norm = TRUE))
     }
   }
   cli::cli_abort("crps needs to be a vector or a 2D matrix, not {.type {crps}}")
