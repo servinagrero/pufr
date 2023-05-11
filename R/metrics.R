@@ -4,37 +4,58 @@
 ## usethis namespace: end
 NULL
 
-#' Shannon entropy optimized for binary vectors
+#' Shannon entropy for numeric values
 #'
 #' @description
 #' The Shannon entropy of a vector is calculated as:
 #' \deqn{H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]}
-#' where \eqn{p(x)} refers to \eqn{p(0)} and \eqn{p(1)} in a binary vector.
-#' By convention, it is assumed that \eqn{0 \log 0 = 0} and \eqn{1 \log 1 = 1}.
+#'
+#' @details
+#' When calculating the probabilities, it is assumed by convention that \eqn{(0\cdot \log 0 = 0)} and \eqn{(1 \cdot \log 1 = 1)}.
+#'
+#' @param v A vector of values
+#'
+#' @return The entropy of the vector
+#'
+#' @export
+entropy_shannon <- function(v) {
+  freqs <- table(v) / length(v)
+  -sum(freqs * log2(freqs))
+}
+
+#' Shannon entropy for binary vectors
 #'
 #' The probability \eqn{p(1)} corresponds to the normalized [hamming_weight] of the vector.
 #'
 #' @param v A binary vector
 #'
-#' @return The Shannon entropy of the vector
+#' @return The entropy of the vector
 #'
 #' @export
-#' @seealso [hamming_weight][pufr::hamming_weight]
+#' @seealso [entropy_shannon][pufr::entropy_shannon]
 #' @examples
 #' entropy_bits(c(0, 0, 0))
 #' entropy_bits(c(1, 1, 1))
 #' entropy_bits(rbits(20))
 entropy_bits <- function(v) {
   p_ones <- hamming_weight(v, norm = TRUE)
-  p_zeros <- 1 - p_ones
-  if (p_ones == 0) {
-    -(p_zeros * log2(p_zeros))
-  } else if (p_zeros == 0) {
-    -(p_ones * log2(p_ones))
-  } else {
-    -((p_ones * log2(p_ones)) + (p_zeros * log2(p_zeros)))
-  }
+  entropy_p(p_ones)
 }
+
+#' Shannon entropy for probabilities
+#'
+#' @param v A vector of probabilities
+#'
+#' @return The entropy of the vector
+#'
+#' @seealso [entropy_shannon][pufr::entropy_shannon]
+#' @export
+entropy_p <- function(v) {
+  p_zero <- 1 - v
+  vals <- -((v * log2(v)) + (p_zero * log2(p_zero)))
+  ifelse(is.nan(vals), 0, vals)
+}
+
 
 #' Hamming weight of CRPs
 #'

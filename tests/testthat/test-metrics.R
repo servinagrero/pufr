@@ -1,11 +1,11 @@
 test_that("entropy of vector full of 0s", {
-  v <- rbits(1000, prob = c(1, 0))
+  v <- rbits(1000, p = 0)
   entropy <- entropy_bits(v)
   expect_equal(entropy, 0)
 })
 
 test_that("entropy of vector full of 1s", {
-  v <- rbits(1000, prob = c(0, 1))
+  v <- rbits(1000, p = 1)
   entropy <- entropy_bits(v)
   expect_equal(entropy, 0)
 })
@@ -19,7 +19,7 @@ test_that("entropy of a unbiased binary vector", {
 test_that("crps_weight handles `NA`", {
   v <- sample(c(0, 1, NA), 1000, replace = TRUE)
   unif <- crps_weight(v)
-  expect_lt(abs(unif - 0.3), 0.1)
+  expect_lt(abs(unif - 0.5), 0.1)
 })
 
 test_that("crps_weight of a bit vector", {

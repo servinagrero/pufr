@@ -4,25 +4,23 @@
 \alias{par_vapply}
 \title{Automatic parallelization of vapply}
 \usage{
-par_vapply(X, FUN, FUN.VALUE = NULL, ...)
+par_vapply(v, fn, value = NULL, ...)
 }
 \arguments{
-\item{X}{a vector (atomic or list) or an \code{\link[base]{expression}}
-    object.  Other objects (including classed objects) will be coerced
-    by \code{base::\link[base]{as.list}}.}
+\item{v}{Vector of values.}
 
-\item{FUN}{the function to be applied to each element of \code{X}:
-    see \sQuote{Details}.  In the case of functions like
-    \code{+}, \code{\%*\%}, the function name must be backquoted or quoted.}
+\item{fn}{Function to apply.}
 
-\item{FUN.VALUE}{a (generalized) vector; a template for the return
-    value from FUN.  See \sQuote{Details}.}
+\item{value}{Expected type of value.}
 
-\item{...}{optional arguments to \code{FUN}.}
+\item{...}{Rest of arguments passed to \code{fn}.}
+}
+\value{
+Vector or array or list of values obtained by applying a function to margins of an array or matrix.
 }
 \description{
 #' Use \link[parallel:clusterApply]{parallel::parApply} if a parallel context has been created with \link{register_parallel}. Otherwise use \link[base:apply]{base::apply}.
 }
 \seealso{
-\link{register_parallel}, \link[parallel:clusterApply]{parallel::parSapply}
+\link{register_parallel}, \link[parallel:clusterApply]{parallel::parSapply}, \link{vapply}
 }

@@ -4,26 +4,23 @@
 \alias{par_apply}
 \title{Automatic parallelization of apply}
 \usage{
-par_apply(X, MARGIN, FUN, ...)
+par_apply(v, margin, fn, ...)
 }
 \arguments{
-\item{X}{an array, including a matrix.}
+\item{v}{Vector of values}
 
-\item{MARGIN}{a vector giving the subscripts which the function will
-    be applied over.  E.g., for a matrix \code{1} indicates rows,
-    \code{2} indicates columns, \code{c(1, 2)} indicates rows and
-    columns. Where \code{X} has named dimnames, it can be a character
-    vector selecting dimension names.}
+\item{margin}{Vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, c(1, 2) indicates rows and columns. Where X has named dimnames, it can be a character vector selecting dimension names.}
 
-\item{FUN}{the function to be applied: see \sQuote{Details}.
-    In the case of functions like \code{+}, \code{\%*\%}, etc., the
-    function name must be backquoted or quoted.}
+\item{fn}{Function to apply.}
 
-\item{...}{optional arguments to \code{FUN}.}
+\item{...}{Rest of arguments passed to \code{fn}.}
+}
+\value{
+Vector or array or list of values obtained by applying a function to margins of an array or matrix.
 }
 \description{
 Use \link[parallel:clusterApply]{parallel::parApply} if a parallel context has been created with \link{register_parallel}. Otherwise use \link[base:apply]{base::apply}.
 }
 \seealso{
-\link{register_parallel}, \link[parallel:clusterApply]{parallel::parApply}
+\link{register_parallel}, \link[parallel:clusterApply]{parallel::parApply}, \link{apply}
 }

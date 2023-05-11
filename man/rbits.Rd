@@ -4,12 +4,12 @@
 \alias{rbits}
 \title{Random binary vector}
 \usage{
-rbits(size, prob = NULL)
+rbits(size, p = 0.5)
 }
 \arguments{
 \item{size}{The size of the vector}
 
-\item{prob}{A numeric vector with 2 values for the probabilities of \code{0} and \code{1} respectively. By default the probabilities are \code{0.5} each.}
+\item{p}{Probability of obtaining a 1. By default is \code{0.5}.}
 }
 \value{
 The generated binary vector
@@ -22,5 +22,5 @@ This function is a wrapper around \link{sample} to generate binary vectors.
 rbits(10)
 
 ## Biased probabilities
-rbits(10, prob = c(0.1, 0.9))
+rbits(10, p = 0.8)
 }

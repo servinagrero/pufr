@@ -20,14 +20,20 @@ x \%</>\% y
 \item{norm}{If \code{TRUE} (default is \code{FALSE}) normalize the distance to the vector length}
 }
 \value{
-The hamming distance
+The Hamming distance
 }
 \description{
-Hamming distance of two vectors
+The Hamming distance of two vectors corresponds to the number of positions where the values differ.
+}
+\details{
+NAs are discarded in any of the vectors.
 }
 \examples{
 hamming_dist(c(0, 1, 0), c(0, 0, 0))
 hamming_dist(c(0, 1, 0), c(0, 0, 0), norm = TRUE)
+
+## NAs in any of the vectors are discarded
+hamming_dist(c(1, NA, 3, 4, 5), c(1, 2, NA, 4, 5))
 c(0, 1, 0) \%<>\% c(1, 0, 0)
 c(0, 1, 0) \%</>\% c(1, 0, 0)
 }

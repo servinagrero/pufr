@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics.R
 \name{entropy_bits}
 \alias{entropy_bits}
-\title{Shannon entropy optimized for binary vectors}
+\title{Shannon entropy for binary vectors}
 \usage{
 entropy_bits(v)
 }
@@ -10,14 +10,9 @@ entropy_bits(v)
 \item{v}{A binary vector}
 }
 \value{
-The Shannon entropy of the vector
+The entropy of the vector
 }
 \description{
-The Shannon entropy of a vector is calculated as:
-\deqn{H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]}
-where \eqn{p(x)} refers to \eqn{p(0)} and \eqn{p(1)} in a binary vector.
-By convention, it is assumed that \eqn{0 \log 0 = 0} and \eqn{1 \log 1 = 1}.
-
 The probability \eqn{p(1)} corresponds to the normalized \link{hamming_weight} of the vector.
 }
 \examples{
@@ -26,5 +21,5 @@ entropy_bits(c(1, 1, 1))
 entropy_bits(rbits(20))
 }
 \seealso{
-\link[=hamming_weight]{hamming_weight}
+\link[=entropy_shannon]{entropy_shannon}
 }

@@ -10,7 +10,9 @@ reference:
     contents:
     - crps_weight
     - crps_uniqueness
+    - entropy_shannon
     - entropy_bits
+    - entropy_p
     - intra_hd
   - title: Utilities
     docs: >
@@ -23,3 +25,4 @@ reference:
     - par_apply
     - par_vapply
     - register_parallel
+    - compare_pairwise

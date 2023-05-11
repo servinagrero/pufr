@@ -18,6 +18,9 @@ The Hamming weight
 The Hamming weight is the number of non null symbols in a vector.
 For a binary vector, it corresponds to the number of 1s.
 }
+\details{
+NAs are discarded in the vector.
+}
 \examples{
 ## Weight of the vector
 hamming_weight(c(0, 1, 1))
@@ -26,5 +29,5 @@ hamming_weight(c(0, 1, 1))
 hamming_weight(c(0, 1, 1), norm = TRUE)
 
 ## `NA` are discarded
-hamming_weight(c(1, 0, NA))
+hamming_weight(c(1, 0, NA), norm = TRUE)
 }

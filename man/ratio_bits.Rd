@@ -4,21 +4,20 @@
 \alias{ratio_bits}
 \title{Ratio of bits in a binary vector}
 \usage{
-ratio_bits(v, na.rm = FALSE)
+ratio_bits(v)
 }
 \arguments{
 \item{v}{A binary vector}
-
-\item{na.rm}{If \code{TRUE} (default is \code{FALSE}) don't account \code{NA} for the length of the vector}
 }
 \value{
 The ratio of bits in the binary vector
 }
 \description{
-The ratio is calculated as the number of 1s minus the number of 0s. A positive ratio indicates that there are more 1s than 0s, while a negative results indicates the opposite. \code{NA} by default are accounted to calculate the length of the vector. They can be discarded by using the argument \code{na.rm}.
-
+The ratio is calculated as the number of 1s minus the number of 0s. A positive ratio indicates that there are more 1s than 0s, while a negative results indicates the opposite. \code{NA} are not accounted to calculate the length of the vector.
+}
+\details{
 By using the \link[=hamming_weight]{hamming_weight} function, the ratio can be calculated in the following way.
-\deqn{Ratio = \frac{HW(v) - (\#v - HW(v))}{\#v} = \frac{2 HW(v)}{\#v}- 1}
+\deqn{Ratio = \frac{HW(v) - (\#v - HW(v))}{\#v} = 2 \cdot HW_{norm}(v) - 1}
 The operator \eqn{\#v} denotes the number of elements in the vector \eqn{v}.
 }
 \examples{
@@ -28,11 +27,8 @@ ratio_bits(c(0, 1, 0))
 ## Positive ratio
 ratio_bits(c(1, 1, 0))
 
-## `NA` are accounted for the length
+## `NA` are discarded
 ratio_bits(c(1, 1, 0, NA, NA))
-
-#' ## `NA` are discarded
-ratio_bits(c(1, 1, 0, NA, NA), na.rm = TRUE)
 }
 \seealso{
 \link[=hamming_weight]{hamming_weight}
