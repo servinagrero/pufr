@@ -6,9 +6,8 @@ using namespace Rcpp;
 //' Uniqueness of CRPs
 //'
 //' The uniqueness is calculated as the average of the hamming distance of the CRPs of two devices, for every pair of devices.
-//' The number of pairs of devices is calculated as:
-//' \deqn{N = \binom{D}{2} = \frac{D(D-1)}{2}}
-//' where D represents the number of devices.
+//' The number of pairs of devices is calculated with the following formula, where \eqn{D} is the number of devices.
+//' \deqn{N = \frac{D(D-1)}{2}}
 //'
 //' @param crps A logical or numeric matrix
 //'
@@ -16,10 +15,10 @@ using namespace Rcpp;
 //'
 //' @export
 //' @examples
-//' mat <- matrix(sample(c(0, 1, 100, replace = TRUE)), nrow = 10, ncol = 10)
-//' crps_uniqueness(mat)
+//' mat <- matrix(rbits(100), nrow = 10, ncol = 10)
+//' uniqueness(mat)
 // [[Rcpp::export]]
-NumericVector crps_uniqueness(const NumericMatrix &crps) {
+NumericVector uniqueness(const NumericMatrix &crps) {
   int n_devices = crps.rows();
   size_t npairs = (n_devices * (n_devices - 1)) / 2;
 

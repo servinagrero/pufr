@@ -10,7 +10,7 @@ entropy_p(v)
 \item{v}{A vector of probabilities}
 }
 \value{
-The entropy of the vector
+The Shannon entropy of each probability
 }
 \description{
 Shannon entropy for probabilities

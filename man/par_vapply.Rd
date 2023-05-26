@@ -19,7 +19,7 @@ par_vapply(v, fn, value = NULL, ...)
 Vector or array or list of values obtained by applying a function to margins of an array or matrix.
 }
 \description{
-#' Use \link[parallel:clusterApply]{parallel::parApply} if a parallel context has been created with \link{register_parallel}. Otherwise use \link[base:apply]{base::apply}.
+Use \link[parallel:clusterApply]{parallel::parApply} if a parallel context has been created with \link{register_parallel}. Otherwise use \link[base:apply]{base::apply}.
 }
 \seealso{
 \link{register_parallel}, \link[parallel:clusterApply]{parallel::parSapply}, \link{vapply}

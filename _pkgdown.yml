@@ -9,11 +9,13 @@ reference:
       Calculate the metrics of some CRPs or a CRP table
     contents:
     - crps_weight
-    - crps_uniqueness
     - entropy_shannon
     - entropy_bits
     - entropy_p
     - intra_hd
+    - reliability
+    - inter_hd
+    - uniqueness
   - title: Utilities
     docs: >
       Utility functions

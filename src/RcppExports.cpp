@@ -10,20 +10,20 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// crps_uniqueness
-NumericVector crps_uniqueness(const NumericMatrix& crps);
-RcppExport SEXP _pufr_crps_uniqueness(SEXP crpsSEXP) {
+// uniqueness
+NumericVector uniqueness(const NumericMatrix& crps);
+RcppExport SEXP _pufr_uniqueness(SEXP crpsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const NumericMatrix& >::type crps(crpsSEXP);
-    rcpp_result_gen = Rcpp::wrap(crps_uniqueness(crps));
+    rcpp_result_gen = Rcpp::wrap(uniqueness(crps));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_pufr_crps_uniqueness", (DL_FUNC) &_pufr_crps_uniqueness, 1},
+    {"_pufr_uniqueness", (DL_FUNC) &_pufr_uniqueness, 1},
     {NULL, NULL, 0}
 };
 

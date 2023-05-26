@@ -140,7 +140,7 @@ par_apply <- function(v, margin, fn, ...) {
 
 #' Automatic parallelization of vapply
 #'
-#' #' Use [parallel::parApply] if a parallel context has been created with [register_parallel]. Otherwise use [base::apply].
+#' Use [parallel::parApply] if a parallel context has been created with [register_parallel]. Otherwise use [base::apply].
 #'
 #' @param v Vector of values.
 #' @param fn Function to apply.
@@ -158,7 +158,6 @@ par_vapply <- function(v, fn, value = NULL, ...) {
   }
 }
 
-
 #' Compare a matrix by pairs of rows
 #'
 #' @description
@@ -172,19 +171,21 @@ par_vapply <- function(v, fn, value = NULL, ...) {
 #' @returns Vector containing the results of all comparisons.
 #' @export
 #' @examples
+#' #' Compare a matrix by pairs of rows
 #' m <- matrix(rbits(25), 5, 5)
 #' res <- compare_pairwise(m, hamming_dist, norm = TRUE)
 #' res
 #' length(res) == (5 * 4 / 2)
+#'
+#' ## Equivalence to uniqueness
+#' res <- compare_pairwise(m, function(f, s) 1 - hamming_dist(f, s, norm = TRUE))
+#' all(uniqueness(m) == res)
 compare_pairwise <- function(m, fn, ...) {
-  nrows <- nrow(m)
-  res <- rep(NA, (nrows * (nrows - 1)) / 2)
-  count <- 1
-  for (i in seq(1, nrows - 1)) {
-    for (j in seq(i+1, nrows)) {
-      res[count] <- fn(m[i, ], m[j, ], ...)
-      count <- count + 1
-    }
-  }
-  res
+  rows <- nrow(m)
+  # TODO: Usne RcppAlgos::comboGeneral to create the pairs
+  res <- sapply(seq(1, rows - 1), function(x) seq(x + 1, rows, 1))
+  idx <- mapply(c, unlist(res), rep(seq(1, rows - 1), seq(rows - 1, 1)), SIMPLIFY = TRUE)
+  par_apply(idx, 2, function(p) {
+    fn(m[p[1], ], m[p[2], ], ...)
+  })
 }
