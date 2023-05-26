@@ -4,12 +4,12 @@
 \alias{crps_weight}
 \title{Hamming weight of CRPs}
 \usage{
-crps_weight(crps, axis = 1)
+crps_weight(crps, margin = 1)
 }
 \arguments{
 \item{crps}{A binary vector or 2D matrix.}
 
-\item{axis}{The axis to calculate the Hamming weight. 1 for rows and 2 for columns.}
+\item{margin}{The margin to calculate the Hamming weight. 1 for rows and 2 for columns.}
 }
 \value{
 The Hamming weight of the CRPs
@@ -17,19 +17,19 @@ The Hamming weight of the CRPs
 \description{
 This function is a wrapper around \link[=hamming_weight]{hamming_weight} to be used on vectors and 2D matrix.
 
-This function assumes that if the CRPs are supplied in a 2D matrix, each row corresponds to a device and each column corresponds to a CRP. If another convetion is used, modify the parameter \code{axis} accordingly.
+This function assumes that if the CRPs are supplied in a 2D matrix, each row corresponds to a device and each column corresponds to a CRP. If another convetion is used, modify the parameter \code{margin} accordingly.
 }
 \details{
 \subsection{Uniformity}{
 
-Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, \code{axis} should be 1.
+Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, \code{margin} should be 1.
 
 \deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
 }
 
 \subsection{Bitaliasing}{
 
-Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, \code{axis} should be 2.
+Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, \code{margin} should be 2.
 
 \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
 }

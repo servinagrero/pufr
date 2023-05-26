@@ -7,30 +7,34 @@
 intra_hd(crps, ref_sample = 1)
 }
 \arguments{
-\item{crps}{A binary 2D matrix or 3D array}
+\item{crps}{A binary vector, 2D matrix or 3D array.}
 
-\item{ref_sample}{Row of the 2D matrix used as reference CRPs}
+\item{ref_sample}{Numeric index for the reference sample: If \code{crps} is a vector, is the index of the reference sample; If \code{crps} is a 2D matrix, the row to use as reference; If \code{crps} is a 3D array,the row for all 3rd dimension matrix.}
 }
 \value{
-If \code{crps} is a 2D matrix, a vector of size \code{nrow(crps) - 1}. If \code{crps} is a 3D array, a 2D matrix where each row contains the intra Hamming distance of the samples for that device.
+If \code{crps} is a vector, the intra Hamming distance of the vector. If \code{crps} is a 2D matrix, the reliability of each column as a vector of size \code{ncol(crps) - 1}. If \code{crps} is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.
 }
 \description{
 The intra Hamming distance of two sets of CRPs measures the numbers of CRPs that differ. N sets of CRPs are equal if their intra Hamming distances are 0.
 
 A response is reliable if it does not change in time, thus, its intra Hamming distance is equal to 0.
 
-If \code{crps} is a 2D matrix, it is assumed that each row corresponds to a sample and each column to a CRP. The \code{ref_sample} will say which row is the sample taken as reference.
-In the case of a 3D matrix, each row corresponds to a device, each column to a CRP and each 3rd dimension to a different sample.
-
-The order of the samples is calculated as \code{setdiff(seq_len(nsamples), ref_sample)} where nsamples corresponds to \code{nrow(crps)} in the case of a 2D matrix and \code{dim(crps)[3]} in the case of a 3D matrix.
+If \code{crps} is a 2D matrix, it is assumed that each row corresponds to a sample and each column to a CRP. The \code{ref_sample} will say which row is the sample taken as reference. In the case of a 3D matrix, each row corresponds to a device, each column to a CRP and each 3rd dimension to a different sample.
+}
+\details{
+The order of the samples is calculated as \code{setdiff(seq_len(nsamples), ref_sample)} where \code{nsamples} corresponds to \code{nrow(crps)} in the case of a 2D matrix and \code{dim(crps)[3]} in the case of a 3D matrix.
 }
 \examples{
+#' ## Bit values
+v <- c(1, 0, 0, 1, 1)
+intra_hd(v, 1)
+
 ## Set of CRPs
-mat <- matrix(0, nrow = 10, ncol = 50)
+mat <- matrix(rbits(50), nrow = 5, ncol = 10)
 intra_hd(mat, 1)
 
 ## Set of devices with their respective samples
-mat <- array(rbits(10 * 50 * 3), dim = c(10, 50, 3))
+mat <- array(rbits(150), dim = c(5, 10, 3))
 intra_hd(mat)
 }
 \seealso{

@@ -1,4 +1,3 @@
-
 .onLoad <- function(libname, pkgname) {
   assign("pufr_env", new.env(), parent.env(environment()))
 }
