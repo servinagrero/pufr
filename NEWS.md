@@ -1,3 +1,11 @@
+# pufr 0.4.0
+
+* Renamed `crps_uniqueness` to `uniqueness`.
+* Add `entropy_shannon`, `entropy_bits` and `entropy_p`.
+* Add `compare_pairwise` to compare a matrix by pairs of rows.
+* Make `intra_hd` accept a vector, a matrix and an array.
+* Add `reliability` to compute the complementary of `intra_hd`.
+
 # pufr 0.3.0
 
 * `crps_uniqueness` now returns a list of values instead of the average uniqueness. (#1)

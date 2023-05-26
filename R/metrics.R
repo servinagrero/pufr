@@ -142,7 +142,7 @@ intra_hd <- function(crps, ref_sample = 1) {
       return(1)
     }
     if (ref_sample < 1 || ref_sample > length(crps)) {
-      cli::cli_abort("ref_sample should be in the range [1, {nrow(crps)}]")
+      cli::cli_abort("ref_sample should be in the range [1, {length(crps)}]")
     }
     sample_ids <- setdiff(seq_along(crps), ref_sample)
     helper <- function(i) {
@@ -150,7 +150,7 @@ intra_hd <- function(crps, ref_sample = 1) {
     }
     return(mean(par_vapply(sample_ids, helper, numeric(1))))
   } else if (is.matrix(crps)) {
-    return(par_apply(crps, 2, intra_hd))
+    return(par_apply(crps, 2, intra_hd, ref_sample))
   } else if (is.array(crps)) {
     return(t(par_apply(crps, 1, function(s) intra_hd(t(s), ref_sample))))
   }
