@@ -1,7 +1,7 @@
 Package: pufr
 Type: Package
 Title: Tools For Analysis Of Physical Unclonable Functions (PUFs)
-Version: 0.3.0
+Version: 0.4.0
 Author: Sergio Vinagrero
 Maintainer: Sergio Vinagrero <servinagrero@gmail.com>
 Description: Functions and algorithms for the analysis and evaluation of Physical Unclonable Functions (PUFs).
