@@ -10,9 +10,12 @@ entropy_bits(v)
 \item{v}{A binary vector}
 }
 \value{
-The entropy of the vector
+The Shannon entropy of the vector
 }
 \description{
+Shannon entropy for binary vectors
+}
+\details{
 The probability \eqn{p(1)} corresponds to the normalized \link{hamming_weight} of the vector.
 }
 \examples{

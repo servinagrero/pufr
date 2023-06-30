@@ -3,7 +3,8 @@
 #' This function is a wrapper around [sample] to generate binary vectors.
 #'
 #' @param size The size of the vector
-#' @param p Probability of obtaining a 1. By default is `0.5`.
+#' @param p Probability of obtaining a 1. By default it's `0.5`.
+#' @param ... Extra arguments passed to matrix or array
 #'
 #' @return The generated binary vector
 #' @export
@@ -14,8 +15,13 @@
 #'
 #' ## Biased probabilities
 #' rbits(10, p = 0.8)
-rbits <- function(size, p = 0.5) {
-  sample(c(0, 1), size, replace = TRUE, c(1 - p, p))
+rbits <- function(size, p = 0.5, ...) {
+  bits <- sample(c(0, 1), prod(size), replace = TRUE, c(1 - p, p))
+  switch (length(size),
+    "1" = bits,
+    "2" = matrix(bits, nrow = size[[1]], ncol = size[[2]], ...),
+    "3" = array(bits, dim = size, ...)
+  )
 }
 
 #' Hamming distance of two vectors
@@ -28,7 +34,7 @@ rbits <- function(size, p = 0.5) {
 #'
 #' @param x A numeric or logical vector
 #' @param y A numeric or logical vector
-#' @param norm If `TRUE` (default is `FALSE`) normalize the distance to the vector length
+#' @param norm If `TRUE` normalize the distance to the vector length. By default it's `FALSE`
 #'
 #' @return The Hamming distance
 #'
@@ -109,14 +115,14 @@ ratio_bits <- function(v) {
 #' @rdname hamming_dist
 #' @export
 #' @examples
-#' c(0, 1, 0) %<>% c(1, 0, 0)
-"%<>%" <- function(x, y) hamming_dist(x, y, norm = FALSE)
+#' c(0, 1, 0) %HD% c(1, 0, 0)
+"%HD%" <- function(x, y) hamming_dist(x, y, norm = FALSE)
 
 #' @rdname hamming_dist
 #' @export
 #' @examples
-#' c(0, 1, 0) %</>% c(1, 0, 0)
-"%</>%" <- function(x, y) hamming_dist(x, y, norm = TRUE)
+#' c(0, 1, 0) %NHD% c(1, 0, 0)
+"%NHD%" <- function(x, y) hamming_dist(x, y, norm = TRUE)
 
 #' Automatic parallelization of apply
 #'

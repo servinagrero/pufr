@@ -18,7 +18,4 @@ StripTrailingWhitespace: Yes
 BuildType: Package
 PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source
-PackageBuildArgs: -fopenmp
-PackageBuildBinaryArgs: -fopenmp
-PackageCheckArgs: -fopenmp
 PackageRoxygenize: rd,collate,namespace,vignette

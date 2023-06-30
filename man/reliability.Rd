@@ -12,7 +12,7 @@ reliability(crps, ref_sample = 1)
 \item{ref_sample}{Numeric index for the reference sample: If \code{crps} is a vector, is the index of the reference sample; If \code{crps} is a 2D matrix, the row to use as reference; If \code{crps} is a 3D array,the row for all 3rd dimension matrix.}
 }
 \description{
-The reliability is defined as \eqn{1 - Intra_{HD}}
+The reliability of a PUF is defined as \eqn{1 - Intra_{HD}}
 }
 \examples{
 ## Set of CRPs

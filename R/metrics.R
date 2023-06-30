@@ -15,7 +15,7 @@ NULL
 #'
 #' @param v A vector of values
 #'
-#' @return The entropy of the vector
+#' @return The Shannon entropy of the vector
 #'
 #' @export
 entropy_shannon <- function(v) {
@@ -25,11 +25,12 @@ entropy_shannon <- function(v) {
 
 #' Shannon entropy for binary vectors
 #'
+#' @details
 #' The probability \eqn{p(1)} corresponds to the normalized [hamming_weight] of the vector.
 #'
 #' @param v A binary vector
 #'
-#' @return The entropy of the vector
+#' @return The Shannon entropy of the vector
 #'
 #' @export
 #' @seealso [entropy_shannon][pufr::entropy_shannon]
@@ -64,19 +65,6 @@ entropy_p <- function(v) {
 #'
 #' This function assumes that if the CRPs are supplied in a 2D matrix, each row corresponds to a device and each column corresponds to a CRP. If another convetion is used, modify the parameter `margin` accordingly.
 #'
-#' @details
-#' ### Uniformity
-#'
-#' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, `margin` should be 1.
-#'
-#' \deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
-#'
-#' ### Bitaliasing
-#'
-#' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, `margin` should be 2.
-#'
-#' \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
-#'
 #' @param crps A binary vector or 2D matrix.
 #' @param margin The margin to calculate the Hamming weight. 1 for rows and 2 for columns.
 #'
@@ -102,6 +90,28 @@ crps_weight <- function(crps, margin = 1) {
     return(par_apply(crps, margin, hamming_weight, norm = TRUE))
   }
   cli::cli_abort("crps needs to be a vector or a 2D matrix, not {.type {crps}}")
+}
+
+#' Uniformity
+#'
+#' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, `margin` should be 1.
+#'
+#' \deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
+#' @rdname crps_weight
+#' @export
+uniformity <- function(crps) {
+  crps_weight(crps, 1)
+}
+
+#' Bitaliasing
+#'
+#' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, `margin` should be 2.
+#'
+#' \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
+#' @rdname crps_weight
+#' @export
+bitaliasing <- function(crps) {
+  crps_weight(crps, 2)
 }
 
 #' Intra Hamming distance of CRPs
@@ -149,9 +159,11 @@ intra_hd <- function(crps, ref_sample = 1) {
       hamming_dist(crps[ref_sample], crps[i], norm = TRUE)
     }
     return(mean(par_vapply(sample_ids, helper, numeric(1))))
-  } else if (is.matrix(crps)) {
+  }
+  if (is.matrix(crps)) {
     return(par_apply(crps, 2, intra_hd, ref_sample))
-  } else if (is.array(crps)) {
+  }
+  if (is.array(crps)) {
     return(t(par_apply(crps, 1, function(s) intra_hd(t(s), ref_sample))))
   }
   cli::cli_abort("crps should be a 2D matrix or 3D array, not {.type {crps}}")
@@ -159,7 +171,7 @@ intra_hd <- function(crps, ref_sample = 1) {
 
 #' Reliability of CRPs
 #'
-#' The reliability is defined as \eqn{1 - Intra_{HD}}
+#' The reliability of a PUF is defined as \eqn{1 - Intra_{HD}}
 #' @inheritParams intra_hd
 #' @export
 #' @seealso [intra_hd][pufr::intra_hd]

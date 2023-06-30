@@ -10,7 +10,7 @@ entropy_shannon(v)
 \item{v}{A vector of values}
 }
 \value{
-The entropy of the vector
+The Shannon entropy of the vector
 }
 \description{
 The Shannon entropy of a vector is calculated as:

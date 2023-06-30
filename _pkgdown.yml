@@ -8,10 +8,12 @@ reference:
     desc: >
       Calculate the metrics of some CRPs or a CRP table
     contents:
-    - crps_weight
     - entropy_shannon
     - entropy_bits
     - entropy_p
+    - crps_weight
+    - uniformity
+    - bitaliasingeau
     - intra_hd
     - reliability
     - inter_hd

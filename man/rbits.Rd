@@ -4,12 +4,14 @@
 \alias{rbits}
 \title{Random binary vector}
 \usage{
-rbits(size, p = 0.5)
+rbits(size, p = 0.5, ...)
 }
 \arguments{
 \item{size}{The size of the vector}
 
-\item{p}{Probability of obtaining a 1. By default is \code{0.5}.}
+\item{p}{Probability of obtaining a 1. By default it's \code{0.5}.}
+
+\item{...}{Extra arguments passed to matrix or array}
 }
 \value{
 The generated binary vector

@@ -2,9 +2,15 @@
 % Please edit documentation in R/metrics.R
 \name{crps_weight}
 \alias{crps_weight}
+\alias{uniformity}
+\alias{bitaliasing}
 \title{Hamming weight of CRPs}
 \usage{
 crps_weight(crps, margin = 1)
+
+uniformity(crps)
+
+bitaliasing(crps)
 }
 \arguments{
 \item{crps}{A binary vector or 2D matrix.}
@@ -18,21 +24,15 @@ The Hamming weight of the CRPs
 This function is a wrapper around \link[=hamming_weight]{hamming_weight} to be used on vectors and 2D matrix.
 
 This function assumes that if the CRPs are supplied in a 2D matrix, each row corresponds to a device and each column corresponds to a CRP. If another convetion is used, modify the parameter \code{margin} accordingly.
-}
-\details{
-\subsection{Uniformity}{
 
 Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, \code{margin} should be 1.
 
-\deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
-}
-
-\subsection{Bitaliasing}{
-
 Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, \code{margin} should be 2.
+}
+\details{
+\deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
 
 \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
-}
 }
 \examples{
 ## Hamming weight of a binary vector
