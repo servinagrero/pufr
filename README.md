@@ -10,6 +10,8 @@
 
 Physical Unclonable Functions, commonly knows as PUFs, are a mechanism that leverages the manufacture variability of devices to generate secrets. PUFs can be used to identify devices or to generate secrets. This package provides functions and algorithms for their analysis and evaluation.
 
+A Python implementation can be found in [Github](https://github.com/servinagrero/pufrpy).
+
 You can learn more about PUFs and their evaluation in `vignette("pufr")`.
 
 ## Installation
