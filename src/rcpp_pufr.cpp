@@ -16,7 +16,7 @@ using namespace Rcpp;
 //'
 //' @export
 //' @examples
-//' mat <- matrix(rbits(100), nrow = 10, ncol = 10)
+//' mat <- rbits(c(10, 10))
 //' uniqueness(mat)
 // [[Rcpp::export]]
 NumericVector uniqueness(const NumericMatrix &crps) {
@@ -33,8 +33,10 @@ NumericVector uniqueness(const NumericMatrix &crps) {
   Environment pufr("package:pufr");
   Function hamming_dist = pufr["hamming_dist"];
 
+  // FIXME: For some reason parallel crashes the whole function
+  // #pragma omp parallel for shared(crps,pair_count) private(i,j)
   #pragma omp for
-  for (int i = 0; i < n_devices; ++i) {
+  for (int i = 0; i < n_devices - 1; ++i) {
     for (int j = i + 1; j < n_devices; ++j) {
       NumericVector hd = hamming_dist(_["x"] = crps.row(i),
                                       _["y"] = crps.row(j), _["norm"] = true);

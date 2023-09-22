@@ -21,6 +21,6 @@ The number of pairs of devices is calculated with the following formula, where \
 \deqn{N = \frac{D(D-1)}{2}}
 }
 \examples{
-mat <- matrix(rbits(100), nrow = 10, ncol = 10)
+mat <- rbits(c(10, 10))
 uniqueness(mat)
 }

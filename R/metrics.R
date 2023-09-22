@@ -45,7 +45,7 @@ entropy_bits <- function(v) {
 
 #' Shannon entropy for probabilities
 #'
-#' @param v A vector of probabilities
+#' @param v A vector of probabilities where each probability is treated as P(1)
 #'
 #' @return The Shannon entropy of each probability
 #'
@@ -87,7 +87,7 @@ crps_weight <- function(crps, margin = 1) {
   if (is.vector(crps)) {
     return(hamming_weight(crps, norm = TRUE))
   } else if (is.matrix(crps)) {
-    return(par_apply(crps, margin, hamming_weight, norm = TRUE))
+    return(apply(crps, margin, function(x) hamming_weight(x, norm = TRUE)))
   }
   cli::cli_abort("crps needs to be a vector or a 2D matrix, not {.type {crps}}")
 }
@@ -127,46 +127,48 @@ bitaliasing <- function(crps) {
 #' The order of the samples is calculated as \code{setdiff(seq_len(nsamples), ref_sample)} where `nsamples` corresponds to \code{nrow(crps)} in the case of a 2D matrix and \code{dim(crps)[3]} in the case of a 3D matrix.
 #'
 #' @param crps A binary vector, 2D matrix or 3D array.
-#' @param ref_sample Numeric index for the reference sample: If `crps` is a vector, is the index of the reference sample; If `crps` is a 2D matrix, the row to use as reference; If `crps` is a 3D array,the row for all 3rd dimension matrix.
+#' @param ref Numeric index for the reference sample: If `crps` is a vector, is the index of the reference sample; If `crps` is a 2D matrix, the row to use as reference; If `crps` is a 3D array,the row for all 3rd dimension matrix.
 #'
 #' @return If `crps` is a vector, the intra Hamming distance of the vector. If `crps` is a 2D matrix, the reliability of each column as a vector of size \code{ncol(crps) - 1}. If `crps` is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.
+#'
+#' TODO: Maybe return the list of comparison to calculate the mean and sd
 #'
 #' @export
 #' @seealso [hamming_dist][pufr::hamming_dist]
 #'
 #' @examples
-#' #' ## Bit values
+#' ## Bit values
 #' v <- c(1, 0, 0, 1, 1)
 #' intra_hd(v, 1)
 #'
 #' ## Set of CRPs
-#' mat <- matrix(rbits(50), nrow = 5, ncol = 10)
+#' mat <- rbits(c(5, 10))
 #' intra_hd(mat, 1)
 #'
 #' ## Set of devices with their respective samples
-#' mat <- array(rbits(150), dim = c(5, 10, 3))
+#' mat <- rbits(c(5, 10, 3))
 #' intra_hd(mat)
-intra_hd <- function(crps, ref_sample = 1) {
+intra_hd <- function(crps, ref = 1) {
+  compare_with_ref <- function(x, ref = 1) {
+    if (!(ref >= 1 & ref <= length(x))) {
+      cli::cli_abort("ref_sample should be in the range [1, {length(x)}]")
+    }
+    1 - bitwXor(x[ref], x[setdiff(seq_along(x), ref)])
+  }
+
   if (is.vector(crps)) {
-    if (length(crps) == 1) {
-      return(1)
-    }
-    if (ref_sample < 1 || ref_sample > length(crps)) {
-      cli::cli_abort("ref_sample should be in the range [1, {length(crps)}]")
-    }
-    sample_ids <- setdiff(seq_along(crps), ref_sample)
-    helper <- function(i) {
-      hamming_dist(crps[ref_sample], crps[i], norm = TRUE)
-    }
-    return(mean(par_vapply(sample_ids, helper, numeric(1))))
+    return(compare_with_ref(crps, ref))
   }
+
   if (is.matrix(crps)) {
-    return(par_apply(crps, 2, intra_hd, ref_sample))
+    return(apply(crps, 2, function(x) compare_with_ref(x, ref)))
   }
+
   if (is.array(crps)) {
-    return(t(par_apply(crps, 1, function(s) intra_hd(t(s), ref_sample))))
+    return(apply(crps, c(1, 2), function(x) mean(compare_with_ref(x, ref))))
   }
-  cli::cli_abort("crps should be a 2D matrix or 3D array, not {.type {crps}}")
+
+  return(1)
 }
 
 #' Reliability of CRPs
@@ -181,8 +183,8 @@ intra_hd <- function(crps, ref_sample = 1) {
 #' mat <- matrix(rbits(200), nrow = 10, ncol = 20)
 #' intra <- intra_hd(mat, 1)
 #' all(1 - intra == reliability(mat, 1))
-reliability <- function(crps, ref_sample = 1) {
-  1 - intra_hd(crps, ref_sample)
+reliability <- function(crps, ref = 1) {
+  1 - intra_hd(crps, ref)
 }
 
 #' @rdname uniqueness

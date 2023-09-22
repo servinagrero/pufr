@@ -7,7 +7,7 @@
 rbits(size, p = 0.5, ...)
 }
 \arguments{
-\item{size}{The size of the vector}
+\item{size}{The size of the vector. Can be a list of dimensions to create a vector, matrix or array. If a vector larger than 3 is provided, each value is treated as the probability of obtaining 1 and a vector of bits is generated using a binomial distribution.}
 
 \item{p}{Probability of obtaining a 1. By default it's \code{0.5}.}
 
@@ -25,4 +25,10 @@ rbits(10)
 
 ## Biased probabilities
 rbits(10, p = 0.8)
+
+## Matrix of bits
+rbits(c(3, 4))
+
+## 3D Array of bits
+rbits(c(3, 4, 2))
 }

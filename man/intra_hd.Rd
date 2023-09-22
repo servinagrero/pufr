@@ -4,12 +4,12 @@
 \alias{intra_hd}
 \title{Intra Hamming distance of CRPs}
 \usage{
-intra_hd(crps, ref_sample = 1)
+intra_hd(crps, ref = 1)
 }
 \arguments{
 \item{crps}{A binary vector, 2D matrix or 3D array.}
 
-\item{ref_sample}{Numeric index for the reference sample: If \code{crps} is a vector, is the index of the reference sample; If \code{crps} is a 2D matrix, the row to use as reference; If \code{crps} is a 3D array,the row for all 3rd dimension matrix.}
+\item{ref}{Numeric index for the reference sample: If \code{crps} is a vector, is the index of the reference sample; If \code{crps} is a 2D matrix, the row to use as reference; If \code{crps} is a 3D array,the row for all 3rd dimension matrix.}
 }
 \value{
 If \code{crps} is a vector, the intra Hamming distance of the vector. If \code{crps} is a 2D matrix, the reliability of each column as a vector of size \code{ncol(crps) - 1}. If \code{crps} is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.
@@ -30,11 +30,11 @@ v <- c(1, 0, 0, 1, 1)
 intra_hd(v, 1)
 
 ## Set of CRPs
-mat <- matrix(rbits(50), nrow = 5, ncol = 10)
+mat <- rbits(c(5, 10))
 intra_hd(mat, 1)
 
 ## Set of devices with their respective samples
-mat <- array(rbits(150), dim = c(5, 10, 3))
+mat <- rbits(c(5, 10, 3))
 intra_hd(mat)
 }
 \seealso{

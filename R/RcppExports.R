@@ -13,7 +13,7 @@
 #'
 #' @export
 #' @examples
-#' mat <- matrix(rbits(100), nrow = 10, ncol = 10)
+#' mat <- rbits(c(10, 10))
 #' uniqueness(mat)
 uniqueness <- function(crps) {
     .Call(`_pufr_uniqueness`, crps)

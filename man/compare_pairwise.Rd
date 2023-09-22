@@ -22,7 +22,7 @@ The pairs are chosen without repetition.
 }
 \examples{
 #' Compare a matrix by pairs of rows
-m <- matrix(rbits(25), 5, 5)
+m <- rbits(c(5, 5))
 res <- compare_pairwise(m, hamming_dist, norm = TRUE)
 res
 length(res) == (5 * 4 / 2)
