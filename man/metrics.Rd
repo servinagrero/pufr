@@ -17,3 +17,10 @@ The calculated metrics in a \code{pufmetrics} object.
 \description{
 Compute the quality metrics of the given CRP matrix
 }
+\examples{
+crps <- rbits(c(5, 50))
+metrics(crps)
+
+crps <- rbits(c(5, 50, 3))
+metrics(crps)
+}

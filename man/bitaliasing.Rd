@@ -7,7 +7,10 @@
 bitaliasing(crps)
 }
 \arguments{
-\item{crps}{A 2D CRP matrix}
+\item{crps}{A bit vector or a 2D CRP matrix}
+}
+\value{
+The normalized Hamming weight of each column.
 }
 \description{
 Unlike \code{Uniformity}, it does not make sense to calculate the bitaliasing of a single bit vector. Thus, \code{bitaliasing} only works on 2D matrix.

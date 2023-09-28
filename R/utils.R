@@ -6,7 +6,7 @@
 #' @param p Probability of obtaining a 1. By default it's `0.5`.
 #' @param ... Extra arguments passed to matrix or array
 #'
-#' @return The generated bit vector
+#' @returns The generated bit vector
 #' @export
 #'
 #' @examples
@@ -52,7 +52,7 @@ rbits <- function(size, p = 0.5, ...) {
 #' @param y A numeric or logical vector
 #' @param norm If `TRUE` normalize the distance to the vector length. By default it's `FALSE`
 #'
-#' @return The Hamming distance
+#' @returns The Hamming distance
 #'
 #' @export
 #' @examples
@@ -80,7 +80,7 @@ hamming_dist <- function(x, y, norm = FALSE) {
 #' @param v A logical or numeric vector
 #' @param norm If `TRUE` (default is `FALSE`) normalize the vector
 #'
-#' @return The Hamming weight
+#' @returns The Hamming weight
 #'
 #' @export
 #' @examples
@@ -109,7 +109,7 @@ hamming_weight <- function(v, norm = FALSE) {
 #'
 #' @param v A binary vector
 #'
-#' @return The ratio of bits in the binary vector
+#' @returns The ratio of bits in the binary vector
 #'
 #' @export
 #' @seealso [hamming_weight][pufr::hamming_weight]

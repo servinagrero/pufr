@@ -11,6 +11,16 @@
 
 \item{...}{Additional parameters}
 }
+\value{
+The number of devices, challenges and samples from the metrics
+}
 \description{
 The dimensions are defined as the number of devices, number of challenges and number of samples. When only 1 sample has been used, the 3rd dimension defaults to 1.
+}
+\examples{
+crps <- rbits(c(5, 50))
+dim(metrics(crps))
+
+crps <- rbits(c(5, 50, 3))
+dim(metrics(crps))
 }

@@ -17,3 +17,12 @@ If the metrics come from a 2D CRP table, 3 histograms are created for uniformity
 \details{
 In the case of a 3D CRP table, 4 graphs are created, 3 histograms for uniformity, bitaliasing and uniqueness, combining all samples, and a matrix showing the reliability of each response.
 }
+\examples{
+## With a single sample
+crps <- rbits(c(5, 50))
+plot(metrics(crps))
+
+## With multiple samples
+crps <- rbits(c(5, 50, 3))
+plot(metrics(crps))
+}

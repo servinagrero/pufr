@@ -15,6 +15,12 @@ The new pufmetrics object where the metrics have been passed to \code{entropy_p}
 \description{
 Convert metrics to entropy calculation
 }
+\examples{
+crps <- rbits(c(5))
+m <- metrics(crps)
+m
+with_entropy(m)
+}
 \seealso{
 \link[=entropy_p]{entropy_p()}
 }

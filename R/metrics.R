@@ -11,6 +11,12 @@ library(viridis)
 #' @returns The calculated metrics in a `pufmetrics` object.
 #'
 #' @export
+#' @examples
+#' crps <- rbits(c(5, 50))
+#' metrics(crps)
+#'
+#' crps <- rbits(c(5, 50, 3))
+#' metrics(crps)
 metrics <- function(crps, with_entropy = FALSE, ...) {
   m <- structure(list(reliability = NA), class = "pufmetrics")
 
@@ -37,6 +43,11 @@ metrics <- function(crps, with_entropy = FALSE, ...) {
 #'
 #' @seealso [entropy_p()][pufr::entropy_p]
 #' @export
+#' @examples
+#' crps <- rbits(c(5))
+#' m <- metrics(crps)
+#' m
+#' with_entropy(m)
 with_entropy <- function(metrics) {
   stopifnot(class(metrics) == "pufmetrics")
 
@@ -62,6 +73,14 @@ with_entropy <- function(metrics) {
 #' @param ... Additional parameters
 #'
 #' @export
+#' @examples
+#' ## With a single sample
+#' crps <- rbits(c(5, 50))
+#' plot(metrics(crps))
+#'
+#' ## With multiple samples
+#' crps <- rbits(c(5, 50, 3))
+#' plot(metrics(crps))
 plot.pufmetrics <- function(m, ...) {
   op <- par(no.readonly = TRUE)
   on.exit(par(op))
@@ -127,18 +146,26 @@ plot.pufmetrics <- function(m, ...) {
 #' @param m The PUF metrics
 #' @param ... Additional parameters
 #'
+#' @returns The number of devices, challenges and samples from the metrics
+#'
 #' @export
+#' @examples
+#' crps <- rbits(c(5, 50))
+#' dim(metrics(crps))
+#'
+#' crps <- rbits(c(5, 50, 3))
+#' dim(metrics(crps))
 dim.pufmetrics <- function(m, ...) {
   samples <- `if`(is.matrix(m$reliability), length(m$uniformity), 1)
   c(nrow(m$reliability), ncol(m$reliability), samples)
 }
 
-#' #' @export
-#' report <- function(m, ...) {
-#'   cli::cli_rule("PUF Metrics")
-#'   cli::cli_text("Number of devices: {dim(m)[1]}")
-#'   cli::cli_text("Number of challenges: {dim(m)[2]}")
-#'   if (length(dim(m)) == 3) {
-#'     cli::cli_text("Number of samples: {dim(m)[3]}")
-#'   }
-#' }
+# #' @export
+# report <- function(m, ...) {
+#   cli::cli_rule("PUF Metrics")
+#   cli::cli_text("Number of devices: {dim(m)[1]}")
+#   cli::cli_text("Number of challenges: {dim(m)[2]}")
+#   if (length(dim(m)) == 3) {
+#     cli::cli_text("Number of samples: {dim(m)[3]}")
+#   }
+# }

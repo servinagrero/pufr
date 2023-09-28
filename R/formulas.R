@@ -20,9 +20,12 @@ NULL
 #'
 #' @param v A vector of values
 #'
-#' @return The Shannon entropy of the vector
+#' @returns The Shannon entropy of the vector
 #'
 #' @export
+#' @examples
+#' v <- sample(1:10, 50, TRUE, rep(0.1, 10))
+#' entropy_shannon(v)
 entropy_shannon <- function(v) {
   freqs <- table(v) / length(v)
   -sum(freqs * log2(freqs))
@@ -35,7 +38,7 @@ entropy_shannon <- function(v) {
 #'
 #' @param v A binary vector
 #'
-#' @return The Shannon entropy of the vector
+#' @returns The Shannon entropy of the vector
 #'
 #' @export
 #' @seealso [entropy_shannon][pufr::entropy_shannon]
@@ -52,7 +55,7 @@ entropy_bits <- function(v) {
 #'
 #' @param v A vector of probabilities where each probability is treated as P(1)
 #'
-#' @return The Shannon entropy of each probability
+#' @returns The Shannon entropy of each probability
 #'
 #' @seealso [entropy_shannon][pufr::entropy_shannon]
 #' @export
@@ -73,7 +76,7 @@ entropy_p <- function(v) {
 #'
 #' @param crps A bit vector or a 2D CRP matrix
 #'
-#' @return If `crps` is a vector, the normalized Hamming weight. If `crps` is a matrix, the normalized Hamming weight of each row.
+#' @returns If `crps` is a vector, the normalized Hamming weight. If `crps` is a matrix, the normalized Hamming weight of each row.
 #'
 #' @export
 #' @seealso [hamming_weight][pufr::hamming_weight]
@@ -102,7 +105,10 @@ uniformity <- function(crps) {
 #' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices.
 #'
 #' \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
-#' @param crps A 2D CRP matrix
+#'
+#' @param crps A bit vector or a 2D CRP matrix
+#'
+#' @returns The normalized Hamming weight of each column.
 #'
 #' @export
 #' @seealso [hamming_weight][pufr::hamming_weight]
@@ -129,7 +135,7 @@ bitaliasing <- function(crps) {
 #' @param crps A binary vector, 2D matrix or 3D array.
 #' @param ref Numeric index for the reference sample: If `crps` is a vector, is the index of the reference sample; If `crps` is a 2D matrix, the row to use as reference; If `crps` is a 3D array,the row for all 3rd dimension matrix.
 #'
-#' @return If `crps` is a vector, the intra Hamming distance of the vector. If `crps` is a 2D matrix, the reliability of each column as a vector of size \code{ncol(crps) - 1}. If `crps` is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.
+#' @returns If `crps` is a vector, the intra Hamming distance of the vector. If `crps` is a 2D matrix, the reliability of each column as a vector of size \code{ncol(crps) - 1}. If `crps` is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.
 #'
 #' TODO: Maybe return the list of comparison to calculate the mean and sd
 #'

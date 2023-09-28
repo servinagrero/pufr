@@ -19,3 +19,7 @@ The Shannon entropy of a vector is calculated as:
 \details{
 When calculating the probabilities, it is assumed by convention that \eqn{(0\cdot \log 0 = 0)} and \eqn{(1 \cdot \log 1 = 1)}.
 }
+\examples{
+v <- sample(1:10, 50, TRUE, rep(0.1, 10))
+entropy_shannon(v)
+}
