@@ -5,6 +5,8 @@ template:
 
 reference:
   - title: Metrics
+    desc: >
+      Compute the quality metrics of PUF data
     contents:
     - metrics
     - with_entropy
@@ -25,7 +27,7 @@ reference:
     - uniqueness
   - title: Utilities
     docs: >
-      Utility functions
+      Utility functions to work with PUF responses
     contents:
     - hamming_dist
     - hamming_weight

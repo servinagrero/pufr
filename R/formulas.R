@@ -1,6 +1,11 @@
 ## usethis namespace: start
 #' @useDynLib pufr, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
+#' @importFrom cowplot plot_grid
+#' @import ggplot2
+#' @import dplyr
+#' @import viridis
+#' @importFrom abind abind
 ## usethis namespace: end
 NULL
 
