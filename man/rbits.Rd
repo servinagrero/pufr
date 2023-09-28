@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{rbits}
 \alias{rbits}
-\title{Random binary vector}
+\title{Random bit vector, matrix or array}
 \usage{
 rbits(size, p = 0.5, ...)
 }
@@ -14,10 +14,10 @@ rbits(size, p = 0.5, ...)
 \item{...}{Extra arguments passed to matrix or array}
 }
 \value{
-The generated binary vector
+The generated bit vector
 }
 \description{
-This function is a wrapper around \link{sample} to generate binary vectors.
+This function is a wrapper around \link{sample} to generate bit vectors.
 }
 \examples{
 ## Unbiased probabilities
@@ -31,4 +31,7 @@ rbits(c(3, 4))
 
 ## 3D Array of bits
 rbits(c(3, 4, 2))
+
+## Individual probabilities
+rbits(c(3, 3), runif(9, max = 0.5))
 }

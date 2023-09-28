@@ -5,15 +5,20 @@ template:
 
 reference:
   - title: Metrics
+    contents:
+    - metrics
+    - with_entropy
+    - dim.pufmetrics
+    - plot.pufmetrics
+  - title: Formulas
     desc: >
-      Calculate the metrics of some CRPs or a CRP table
+      Compute the metrics of bit vectors or CRP matrices
     contents:
     - entropy_shannon
     - entropy_bits
     - entropy_p
-    - crps_weight
     - uniformity
-    - bitaliasingeau
+    - bitaliasing
     - intra_hd
     - reliability
     - inter_hd
@@ -26,7 +31,4 @@ reference:
     - hamming_weight
     - ratio_bits
     - rbits
-    - par_apply
-    - par_vapply
-    - register_parallel
     - compare_pairwise

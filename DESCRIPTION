@@ -12,8 +12,11 @@ BugReports: https://servinagrero.github.io/pufr/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    cli,
-    Rcpp
+    dplyr,
+    cowplot,
+    ggplot2,
+    Rcpp,
+    viridis
 LinkingTo: Rcpp
 RoxygenNote: 7.2.3
 Enhances: parallel
