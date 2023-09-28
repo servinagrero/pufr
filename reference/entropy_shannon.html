@@ -12,7 +12,7 @@ $$H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]$$"><meta property="o
     
     <a class="navbar-brand me-2" href="../index.html">pufr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +46,7 @@ $$H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]$$"><meta property="o
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Shannon entropy for numeric values</h1>
-      <small class="dont-index">Source: <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/metrics.R" class="external-link"><code>R/metrics.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/formulas.R" class="external-link"><code>R/formulas.R</code></a></small>
       <div class="d-none name"><code>entropy_shannon.Rd</code></div>
     </div>
 
@@ -70,13 +70,20 @@ $$H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]$$</p>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>The entropy of the vector</p>
+<p>The Shannon entropy of the vector</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>When calculating the probabilities, it is assumed by convention that \((0\cdot \log 0 = 0)\) and \((1 \cdot \log 1 = 1)\).</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">50</span>, <span class="cn">TRUE</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">entropy_shannon</span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.230952</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

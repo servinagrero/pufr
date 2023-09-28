@@ -14,7 +14,7 @@ $$N = \frac{D(D-1)}{2}$$"><meta property="og:image" content="https://servinagrer
     
     <a class="navbar-brand me-2" href="../index.html">pufr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ $$N = \frac{D(D-1)}{2}$$"><meta property="og:image" content="https://servinagrer
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Uniqueness of CRPs</h1>
-      <small class="dont-index">Source: <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/RcppExports.R" class="external-link"><code>R/RcppExports.R</code></a>, <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/metrics.R" class="external-link"><code>R/metrics.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/RcppExports.R" class="external-link"><code>R/RcppExports.R</code></a>, <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/formulas.R" class="external-link"><code>R/formulas.R</code></a></small>
       <div class="d-none name"><code>uniqueness.Rd</code></div>
     </div>
 
@@ -80,11 +80,11 @@ $$N = \frac{D(D-1)}{2}$$</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">10</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">uniqueness</span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.5 0.5 0.6 0.4 0.5 0.8 0.5 0.3 0.6 0.4 0.5 0.5 0.4 0.7 0.6 0.6 0.7 0.7 0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20] 0.6 0.5 0.6 0.4 0.5 0.4 0.7 0.6 0.3 0.7 0.6 0.5 0.4 0.9 0.3 0.4 0.5 0.4 0.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [39] 0.3 0.5 0.5 0.4 0.2 0.5 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.5 0.6 0.4 0.5 0.8 0.4 0.3 0.5 0.7 0.7 0.7 0.4 0.7 0.7 0.6 0.4 0.4 0.4 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20] 0.6 0.6 0.3 0.5 0.3 0.5 0.6 0.6 0.7 0.5 0.5 0.5 0.7 0.6 0.6 0.6 0.4 0.5 0.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [39] 0.7 0.5 0.5 0.3 0.6 0.4 0.4</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

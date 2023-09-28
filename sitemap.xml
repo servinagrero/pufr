@@ -22,10 +22,13 @@
     <loc>https://servinagrero.github.io/pufr/news/index.html</loc>
   </url>
   <url>
+    <loc>https://servinagrero.github.io/pufr/reference/bitaliasing.html</loc>
+  </url>
+  <url>
     <loc>https://servinagrero.github.io/pufr/reference/compare_pairwise.html</loc>
   </url>
   <url>
-    <loc>https://servinagrero.github.io/pufr/reference/crps_weight.html</loc>
+    <loc>https://servinagrero.github.io/pufr/reference/dim.pufmetrics.html</loc>
   </url>
   <url>
     <loc>https://servinagrero.github.io/pufr/reference/entropy_bits.html</loc>
@@ -49,10 +52,10 @@
     <loc>https://servinagrero.github.io/pufr/reference/intra_hd.html</loc>
   </url>
   <url>
-    <loc>https://servinagrero.github.io/pufr/reference/par_apply.html</loc>
+    <loc>https://servinagrero.github.io/pufr/reference/metrics.html</loc>
   </url>
   <url>
-    <loc>https://servinagrero.github.io/pufr/reference/par_vapply.html</loc>
+    <loc>https://servinagrero.github.io/pufr/reference/plot.pufmetrics.html</loc>
   </url>
   <url>
     <loc>https://servinagrero.github.io/pufr/reference/ratio_bits.html</loc>
@@ -61,12 +64,15 @@
     <loc>https://servinagrero.github.io/pufr/reference/rbits.html</loc>
   </url>
   <url>
-    <loc>https://servinagrero.github.io/pufr/reference/register_parallel.html</loc>
-  </url>
-  <url>
     <loc>https://servinagrero.github.io/pufr/reference/reliability.html</loc>
   </url>
   <url>
+    <loc>https://servinagrero.github.io/pufr/reference/uniformity.html</loc>
+  </url>
+  <url>
     <loc>https://servinagrero.github.io/pufr/reference/uniqueness.html</loc>
+  </url>
+  <url>
+    <loc>https://servinagrero.github.io/pufr/reference/with_entropy.html</loc>
   </url>
 </urlset>

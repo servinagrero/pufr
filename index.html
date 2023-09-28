@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">pufr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,8 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>Physical Unclonable Functions, commonly knows as PUFs, are a mechanism that leverages the manufacture variability of devices to generate secrets. PUFs can be used to identify devices or to generate secrets. This package provides functions and algorithms for their analysis and evaluation.</p>
+<p>Physical Unclonable Functions, commonly knows as PUFs, are a mechanism that leverages the manufacture variability of devices to generate secrets. PUFs can be used to identify devices or to generate secrets. This package provides functions and algorithms for their analysis and evaluation. The functions provided in this package are optimised to be fast enough for most use cases.</p>
+<p>A Python implementation can be found in <a href="https://github.com/servinagrero/pufrpy" class="external-link">Github</a>.</p>
 <p>You can learn more about PUFs and their evaluation in <code><a href="articles/pufr.html">vignette("pufr")</a></code>.</p>
 </div>
 <div class="section level2">
@@ -91,6 +92,73 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"servinagrero/pufr"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="basic-functionality">Basic functionality<a class="anchor" aria-label="anchor" href="#basic-functionality"></a>
+</h2>
+<p>PUFR provides functions and operators to work both with bit vectors (vectors containing 1s and 0s) and CRPs matrices (2D or 3D matrices with 1s and 0s).</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/servinagrero/pufr" class="external-link">pufr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># rbits can be used to generate bits with desired probabilities</span></span>
+<span><span class="va">v1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rbits.html">rbits</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span></span>
+<span><span class="va">v2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rbits.html">rbits</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/hamming_dist.html">hamming_dist</a></span><span class="op">(</span><span class="va">v1</span>, <span class="va">v2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 19</span></span>
+<span><span class="co"># Or alternatively</span></span>
+<span><span class="va">v1</span> <span class="op"><a href="reference/hamming_dist.html">%HD%</a></span> <span class="va">v2</span></span>
+<span><span class="co">#&gt; [1] 19</span></span>
+<span></span>
+<span><span class="co"># Shannon entropy for bit vectors</span></span>
+<span><span class="fu"><a href="reference/entropy_bits.html">entropy_bits</a></span><span class="op">(</span><span class="va">v1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.9895875</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a>
+</h2>
+<p>PUFR provides utilities to calculate the canonical metrics (uniformity, bitaliasing, uniqueness and reliability) of CRPs. They can be calculated using their respective functions.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 5 devices with 10 challenges each</span></span>
+<span><span class="va">crps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/uniformity.html">uniformity</a></span><span class="op">(</span><span class="va">crps</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.5 0.5 0.4 0.6 0.4</span></span>
+<span><span class="fu"><a href="reference/bitaliasing.html">bitaliasing</a></span><span class="op">(</span><span class="va">crps</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] 0.4 0.6 0.8 0.6 0.4 0.4 0.2 0.6 0.2 0.6</span></span>
+<span><span class="fu"><a href="reference/uniqueness.html">uniqueness</a></span><span class="op">(</span><span class="va">crps</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] 0.6 0.3 0.5 0.1 0.5 0.7 0.5 0.2 0.8 0.4</span></span>
+<span></span>
+<span><span class="co"># For a 2D matrix, each column contains a sample</span></span>
+<span><span class="co"># In a 3D matrix, the 3rd dimension represents the samples</span></span>
+<span><span class="co"># 5 samples of 5 devices with 10 challenges each</span></span>
+<span><span class="va">crps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/reliability.html">reliability</a></span><span class="op">(</span><span class="va">crps</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
+<span><span class="co">#&gt; [1,] 1.00 0.75 0.25 0.75 0.25 0.25 0.25 0.75 0.00  0.50</span></span>
+<span><span class="co">#&gt; [2,] 0.75 0.75 0.25 0.50 1.00 0.50 0.50 0.75 0.25  0.25</span></span>
+<span><span class="co">#&gt; [3,] 0.50 0.75 0.25 0.75 1.00 0.25 0.50 0.50 1.00  0.75</span></span>
+<span><span class="co">#&gt; [4,] 0.25 0.50 0.25 0.75 0.25 0.50 0.50 0.50 0.75  0.25</span></span>
+<span><span class="co">#&gt; [5,] 0.50 0.50 0.50 0.25 0.25 0.50 0.75 0.25 0.50  0.25</span></span></code></pre></div>
+<p>All the metrics can be calculated at once by using the <code>metrics</code> function, which handles both 2D and 3D matrices.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">crps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">met</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/metrics.html">metrics</a></span><span class="op">(</span><span class="va">crps</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="exploration-of-metrics">Exploration of metrics<a class="anchor" aria-label="anchor" href="#exploration-of-metrics"></a>
+</h3>
+<p>Metrics created through the <code>metrics</code> function can be plotted and summarised easily.</p>
+<p>In the case of a 2D CRP matrix, 3 histograms are created, for uniformity, bitaliasing and uniqueness respectively.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">crps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/metrics.html">metrics</a></span><span class="op">(</span><span class="va">crps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-5-1.png" width="100%"></p>
+<p>In the case of a 3D CRP matrix, response samples are drawn from the 3rd dimension. The histograms are now grouped per sample and an additional raster plot is created to show the reliability of each independent response.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">crps</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/metrics.html">metrics</a></span><span class="op">(</span><span class="va">crps</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="100%"></p>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

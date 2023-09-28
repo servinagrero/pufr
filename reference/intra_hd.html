@@ -14,7 +14,7 @@ If crps is a 2D matrix, it is assumed that each row corresponds to a sample and 
     
     <a class="navbar-brand me-2" href="../index.html">pufr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ If crps is a 2D matrix, it is assumed that each row corresponds to a sample and 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.svg" class="logo" alt=""><h1>Intra Hamming distance of CRPs</h1>
-      <small class="dont-index">Source: <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/metrics.R" class="external-link"><code>R/metrics.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/servinagrero/pufr/blob/HEAD/R/formulas.R" class="external-link"><code>R/formulas.R</code></a></small>
       <div class="d-none name"><code>intra_hd.Rd</code></div>
     </div>
 
@@ -60,7 +60,7 @@ If crps is a 2D matrix, it is assumed that each row corresponds to a sample and 
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">intra_hd</span><span class="op">(</span><span class="va">crps</span>, ref_sample <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">intra_hd</span><span class="op">(</span><span class="va">crps</span>, ref <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,7 +69,7 @@ If crps is a 2D matrix, it is assumed that each row corresponds to a sample and 
 <dd><p>A binary vector, 2D matrix or 3D array.</p></dd>
 
 
-<dt>ref_sample</dt>
+<dt>ref</dt>
 <dd><p>Numeric index for the reference sample: If <code>crps</code> is a vector, is the index of the reference sample; If <code>crps</code> is a 2D matrix, the row to use as reference; If <code>crps</code> is a 3D array,the row for all 3rd dimension matrix.</p></dd>
 
 </dl></div>
@@ -78,6 +78,9 @@ If crps is a 2D matrix, it is assumed that each row corresponds to a sample and 
     
 
 <p>If <code>crps</code> is a vector, the intra Hamming distance of the vector. If <code>crps</code> is a 2D matrix, the reliability of each column as a vector of size <code>ncol(crps) - 1</code>. If <code>crps</code> is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.</p>
+
+
+<p>TODO: Maybe return the list of comparison to calculate the mean and sd</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -90,25 +93,29 @@ If crps is a 2D matrix, it is assumed that each row corresponds to a sample and 
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#' ## Bit values</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Bit values</span></span></span>
 <span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">intra_hd</span><span class="op">(</span><span class="va">v</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0 0 1 1</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Set of CRPs</span></span></span>
-<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">5</span>, ncol <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">intra_hd</span><span class="op">(</span><span class="va">mat</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.50 0.25 0.25 0.00 0.75 0.00 0.75 0.75 0.50 0.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0    0    1    0    0    0    0    1    1     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    1    1    1    1    0    1    1    0    0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    1    0    1    0    0    1    0    1    0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0    0    1    1    0    1    1    1    1     0</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Set of devices with their respective samples</span></span></span>
-<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html" class="external-link">array</a></span><span class="op">(</span><span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fl">150</span><span class="op">)</span>, dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">intra_hd</span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  1.0  0.5  0.5  0.5  0.5  0.5  1.0  0.0    0   0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.5  0.5  1.0  0.5  0.5  0.0  0.5  0.0    0   1.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.0  0.5  0.5  0.5  0.5  0.0  0.5  0.5    0   1.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  1.0  0.5  1.0  0.0  0.5  0.5  1.0  0.0    0   0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  0.0  0.5  0.0  0.5  0.5  0.0  0.0  0.5    1   0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.5  0.5  1.0  1.0  0.5  0.5  0.5  0.5  1.0   1.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  0.0  0.5  0.0  0.5  1.0  0.5  0.5  1.0  0.0   0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.5  0.0  1.0  1.0  0.0  0.0  0.0  1.0  0.5   0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]  0.0  0.0  0.5  0.5  0.5  0.5  0.0  0.0  0.0   0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]  0.5  0.5  0.5  0.5  0.5  1.0  0.5  0.5  1.0   0.5</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">pufr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
     <div class="section level2">
       <h2 id="metrics">Metrics<a class="anchor" aria-label="anchor" href="#metrics"></a></h2>
       
-      <p class="section-desc"></p><p>Calculate the metrics of some CRPs or a CRP table</p>
+      <p class="section-desc"></p><p>Compute the quality metrics of PUF data</p>
 
       
     </div><div id="" class="section level2">
@@ -59,10 +59,36 @@
 
       <dl><dt>
           
-          <code><a href="crps_weight.html">crps_weight()</a></code> 
+          <code><a href="metrics.html">metrics()</a></code> 
         </dt>
-        <dd>Hamming weight of CRPs</dd>
+        <dd>Compute the quality metrics of the given CRP matrix</dd>
       </dl><dl><dt>
+          
+          <code><a href="with_entropy.html">with_entropy()</a></code> 
+        </dt>
+        <dd>Convert metrics to entropy calculation</dd>
+      </dl><dl><dt>
+          
+          <code><a href="dim.pufmetrics.html">dim(<i>&lt;pufmetrics&gt;</i>)</a></code> 
+        </dt>
+        <dd>Returns the dimensions of the metrics</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.pufmetrics.html">plot(<i>&lt;pufmetrics&gt;</i>)</a></code> 
+        </dt>
+        <dd>Create a plot with a summary of all the metrics</dd>
+      </dl></div><div class="section level2">
+      <h2 id="formulas">Formulas<a class="anchor" aria-label="anchor" href="#formulas"></a></h2>
+      
+      <p class="section-desc"></p><p>Compute the metrics of bit vectors or CRP matrices</p>
+
+      
+    </div><div id="" class="section level2">
+      
+      
+      
+
+      <dl><dt>
           
           <code><a href="entropy_shannon.html">entropy_shannon()</a></code> 
         </dt>
@@ -77,6 +103,16 @@
           <code><a href="entropy_p.html">entropy_p()</a></code> 
         </dt>
         <dd>Shannon entropy for probabilities</dd>
+      </dl><dl><dt>
+          
+          <code><a href="uniformity.html">uniformity()</a></code> 
+        </dt>
+        <dd>Uniformity of a bit vector or a CRP matrix</dd>
+      </dl><dl><dt>
+          
+          <code><a href="bitaliasing.html">bitaliasing()</a></code> 
+        </dt>
+        <dd>Bitaliasing of a CRP matrix</dd>
       </dl><dl><dt>
           
           <code><a href="intra_hd.html">intra_hd()</a></code> 
@@ -105,7 +141,7 @@
 
       <dl><dt>
           
-          <code><a href="hamming_dist.html">hamming_dist()</a></code> <code><a href="hamming_dist.html">`%&lt;&gt;%`</a></code> <code><a href="hamming_dist.html">`%&lt;/&gt;%`</a></code> 
+          <code><a href="hamming_dist.html">hamming_dist()</a></code> <code><a href="hamming_dist.html">`%HD%`</a></code> <code><a href="hamming_dist.html">`%NHD%`</a></code> 
         </dt>
         <dd>Hamming distance of two vectors</dd>
       </dl><dl><dt>
@@ -122,22 +158,7 @@
           
           <code><a href="rbits.html">rbits()</a></code> 
         </dt>
-        <dd>Random binary vector</dd>
-      </dl><dl><dt>
-          
-          <code><a href="par_apply.html">par_apply()</a></code> 
-        </dt>
-        <dd>Automatic parallelization of apply</dd>
-      </dl><dl><dt>
-          
-          <code><a href="par_vapply.html">par_vapply()</a></code> 
-        </dt>
-        <dd>Automatic parallelization of vapply</dd>
-      </dl><dl><dt>
-          
-          <code><a href="register_parallel.html">register_parallel()</a></code> 
-        </dt>
-        <dd>Register a parallel cluster</dd>
+        <dd>Random bit vector, matrix or array</dd>
       </dl><dl><dt>
           
           <code><a href="compare_pairwise.html">compare_pairwise()</a></code> 
