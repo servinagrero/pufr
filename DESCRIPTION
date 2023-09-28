@@ -16,7 +16,9 @@ Imports:
     cowplot,
     ggplot2,
     Rcpp,
-    viridis
+    viridis,
+    reshape2,
+    cli
 LinkingTo: Rcpp
 RoxygenNote: 7.2.3
 Enhances: parallel

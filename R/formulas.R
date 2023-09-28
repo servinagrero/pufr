@@ -5,7 +5,9 @@
 #' @import ggplot2
 #' @import dplyr
 #' @import viridis
-#' @importFrom abind abind
+#' @import cli
+#' @importFrom stats rbinom
+#' @importFrom reshape2 melt
 ## usethis namespace: end
 NULL
 

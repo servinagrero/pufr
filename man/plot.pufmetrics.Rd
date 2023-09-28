@@ -4,10 +4,10 @@
 \alias{plot.pufmetrics}
 \title{Create a plot with a summary of all the metrics}
 \usage{
-\method{plot}{pufmetrics}(m, ...)
+\method{plot}{pufmetrics}(x, ...)
 }
 \arguments{
-\item{m}{The PUF metrics}
+\item{x}{The PUF metrics}
 
 \item{...}{Additional parameters}
 }

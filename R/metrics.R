@@ -17,7 +17,7 @@ library(viridis)
 #'
 #' crps <- rbits(c(5, 50, 3))
 #' metrics(crps)
-metrics <- function(crps, with_entropy = FALSE, ...) {
+metrics <- function(crps, with_entropy = FALSE) {
   m <- structure(list(reliability = NA), class = "pufmetrics")
 
   if (is.matrix(crps)) {
@@ -41,10 +41,10 @@ metrics <- function(crps, with_entropy = FALSE, ...) {
 #'
 #' @returns The new pufmetrics object where the metrics have been passed to `entropy_p` description
 #'
-#' @seealso [entropy_p()][pufr::entropy_p]
+#' @seealso [entropy_p][pufr::entropy_p]
 #' @export
 #' @examples
-#' crps <- rbits(c(5))
+#' crps <- rbits(c(5, 50))
 #' m <- metrics(crps)
 #' m
 #' with_entropy(m)
@@ -53,7 +53,7 @@ with_entropy <- function(metrics) {
 
   m <- metrics
 
-  if (length(dim(metrics)) == 2) {
+  if (dim(metrics)[3] == 1) {
     m$uniformity <- entropy_p(metrics$uniformity)
     m$bitaliasing <- entropy_p(metrics$bitaliasing)
   } else {
@@ -69,7 +69,7 @@ with_entropy <- function(metrics) {
 #'
 #' In the case of a 3D CRP table, 4 graphs are created, 3 histograms for uniformity, bitaliasing and uniqueness, combining all samples, and a matrix showing the reliability of each response.
 #'
-#' @param m The PUF metrics
+#' @param x The PUF metrics
 #' @param ... Additional parameters
 #'
 #' @export
@@ -81,15 +81,12 @@ with_entropy <- function(metrics) {
 #' ## With multiple samples
 #' crps <- rbits(c(5, 50, 3))
 #' plot(metrics(crps))
-plot.pufmetrics <- function(m, ...) {
-  op <- par(no.readonly = TRUE)
-  on.exit(par(op))
-
-  histogram <- function(m) {
-    do.call(rbind, m) %>%
+plot.pufmetrics <- function(x, ...) {
+  histogram <- function(x) {
+    df <- do.call(rbind, x) %>%
       reshape2::melt() %>%
-      rename(sample = "Var1") %>%
-      ggplot() +
+      rename(sample = "Var1")
+    ggplot(df) +
       geom_histogram(
         aes(x = value, group = sample, fill = as.factor(sample)),
         position = "dodge", bins = 10
@@ -100,14 +97,14 @@ plot.pufmetrics <- function(m, ...) {
       labs(fill = "Sample")
   }
 
-  if (is.matrix(m$reliability)) {
-    p_unif <- histogram(m$uniformity)
-    p_ba <- histogram(m$bitaliasing)
-    p_uniq <- histogram(m$uniqueness)
+  if (is.matrix(x$reliability)) {
+    p_unif <- histogram(x$uniformity)
+    p_ba <- histogram(x$bitaliasing)
+    p_uniq <- histogram(x$uniqueness)
 
-    p_rel <- reshape2::melt(m$reliability) %>%
+    p_rel <- reshape2::melt(x$reliability) %>%
       ggplot() +
-      geom_raster(aes(x = Var1, y = Var2, fill = value)) +
+      geom_raster(aes(x = Var2, y = Var1, fill = value)) +
       scale_fill_viridis() +
       labs(x = "Challenge", y = "Device", fill = "Rel")
 
@@ -121,9 +118,9 @@ plot.pufmetrics <- function(m, ...) {
     )
   } else {
     plist <- lapply(
-      m[c("uniformity", "bitaliasing", "uniqueness")],
-      function(met) {
-        data.frame(value = met) %>%
+      x[c("uniformity", "bitaliasing", "uniqueness")],
+      function(mat) {
+        data.frame(value = mat) %>%
           ggplot() +
           geom_histogram(aes(x = value), bins = 10) +
           scale_x_continuous(n.breaks = 10) +
@@ -143,8 +140,7 @@ plot.pufmetrics <- function(m, ...) {
 #'
 #' The dimensions are defined as the number of devices, number of challenges and number of samples. When only 1 sample has been used, the 3rd dimension defaults to 1.
 #'
-#' @param m The PUF metrics
-#' @param ... Additional parameters
+#' @param x The PUF metrics
 #'
 #' @returns The number of devices, challenges and samples from the metrics
 #'
@@ -155,17 +151,19 @@ plot.pufmetrics <- function(m, ...) {
 #'
 #' crps <- rbits(c(5, 50, 3))
 #' dim(metrics(crps))
-dim.pufmetrics <- function(m, ...) {
-  samples <- `if`(is.matrix(m$reliability), length(m$uniformity), 1)
-  c(nrow(m$reliability), ncol(m$reliability), samples)
+dim.pufmetrics <- function(x) {
+  if (is.matrix(x$reliability)) {
+    c(length(x$reliability), ncol(x$reliability), length(x$uniformity))
+  } else {
+    c(length(x$uniformity), length(x$bitaliasing), 1)
+  }
 }
 
-# #' @export
 # report <- function(m, ...) {
-#   cli::cli_rule("PUF Metrics")
-#   cli::cli_text("Number of devices: {dim(m)[1]}")
-#   cli::cli_text("Number of challenges: {dim(m)[2]}")
+#   cli_rule("PUF Metrics")
+#   cli_text("Number of devices: {dim(m)[1]}")
+#   cli_text("Number of challenges: {dim(m)[2]}")
 #   if (length(dim(m)) == 3) {
-#     cli::cli_text("Number of samples: {dim(m)[3]}")
+#     cli_text("Number of samples: {dim(m)[3]}")
 #   }
 # }

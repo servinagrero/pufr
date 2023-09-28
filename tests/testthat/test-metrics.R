@@ -1,3 +1,12 @@
+test_that("rbits creates a vector, matrix and array", {
+  v <- rbits(10)
+  expect_equal(length(v), 10)
+  m <- rbits(c(5, 10))
+  expect_equal(dim(m), c(5, 10))
+  a <- rbits(c(5, 10, 3))
+  expect_equal(dim(a), c(5, 10, 3))
+})
+
 test_that("entropy of vector full of 0s", {
   v <- rbits(1000, p = 0)
   entropy <- entropy_bits(v)

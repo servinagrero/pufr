@@ -4,7 +4,7 @@
 \alias{metrics}
 \title{Compute the quality metrics of the given CRP matrix}
 \usage{
-metrics(crps, with_entropy = FALSE, ...)
+metrics(crps, with_entropy = FALSE)
 }
 \arguments{
 \item{crps}{A 2D or 3D CRP matrix}

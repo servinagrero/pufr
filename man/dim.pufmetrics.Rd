@@ -4,12 +4,10 @@
 \alias{dim.pufmetrics}
 \title{Returns the dimensions of the metrics}
 \usage{
-\method{dim}{pufmetrics}(m, ...)
+\method{dim}{pufmetrics}(x)
 }
 \arguments{
-\item{m}{The PUF metrics}
-
-\item{...}{Additional parameters}
+\item{x}{The PUF metrics}
 }
 \value{
 The number of devices, challenges and samples from the metrics

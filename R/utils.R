@@ -1,6 +1,6 @@
 #' Random bit vector, matrix or array
 #'
-#' This function is a wrapper around [sample] to generate bit vectors.
+#' This function is a wrapper around [sample] to generate bit vectors. The matrix and array version are creating by row.
 #'
 #' @param size The size of the vector. Can be a list of dimensions to create a vector, matrix or array. If a vector larger than 3 is provided, each value is treated as the probability of obtaining 1 and a vector of bits is generated using a binomial distribution.
 #' @param p Probability of obtaining a 1. By default it's `0.5`.
@@ -36,7 +36,7 @@ rbits <- function(size, p = 0.5, ...) {
   } else if (length(size) == 2) {
     matrix(bits, nrow = size[[1]], ncol = size[[2]], byrow = TRUE, ...)
   } else if (length(size) == 3) {
-    aperm(array(bits, dim = size, ...), c(2, 1, 3))
+    aperm(array(bits, dim = c(size[2], size[1], size[3]), ...), c(2, 1, 3))
   }
 }
 
