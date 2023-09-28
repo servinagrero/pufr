@@ -171,7 +171,8 @@ intra_hd <- function(crps, ref = 1) {
   }
 
   if (is.array(crps)) {
-    return(apply(crps, c(1, 2), function(x) mean(compare_with_ref(x, ref))))
+    mat <- apply(crps, c(1, 2), function(x) mean(compare_with_ref(x, ref)))
+    return(t(mat))
   }
 
   return(1)
