@@ -8,3 +8,4 @@
 ^Meta$
 ^Makefile$
 ^codecov\.yml$
+^README\.Rmd$

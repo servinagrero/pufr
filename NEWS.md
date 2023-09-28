@@ -1,3 +1,11 @@
+# pufr 0.5.0
+
+* Make `rbits` create vector, matrix and array, for convenience purposes.
+* Added `pufmetrics` class. Allows for automatic plotting and exploration of all metrics.
+* Added `compare_pairwise` function to perform functions on all pairs of devices.
+* Removed parallel code. If needed, parallelization should be implemented by the user.
+* Removed `crps_weight` function in favor of `uniformity` and `bitaliasing`
+
 # pufr 0.4.0
 
 * Renamed `crps_uniqueness` to `uniqueness`.

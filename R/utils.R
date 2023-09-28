@@ -1,11 +1,12 @@
-#' Random binary vector
+#' Random bit vector, matrix or array
 #'
-#' This function is a wrapper around [sample] to generate binary vectors.
+#' This function is a wrapper around [sample] to generate bit vectors. The matrix and array version are creating by row.
 #'
-#' @param size The size of the vector
-#' @param p Probability of obtaining a 1. By default is `0.5`.
+#' @param size The size of the vector. Can be a list of dimensions to create a vector, matrix or array. If a vector larger than 3 is provided, each value is treated as the probability of obtaining 1 and a vector of bits is generated using a binomial distribution.
+#' @param p Probability of obtaining a 1. By default it's `0.5`.
+#' @param ... Extra arguments passed to matrix or array
 #'
-#' @return The generated binary vector
+#' @returns The generated bit vector
 #' @export
 #'
 #' @examples
@@ -14,8 +15,29 @@
 #'
 #' ## Biased probabilities
 #' rbits(10, p = 0.8)
-rbits <- function(size, p = 0.5) {
-  sample(c(0, 1), size, replace = TRUE, c(1 - p, p))
+#'
+#' ## Matrix of bits
+#' rbits(c(3, 4))
+#'
+#' ## 3D Array of bits
+#' rbits(c(3, 4, 2))
+#'
+#' ## Individual probabilities
+#' rbits(c(3, 3), runif(9, max = 0.5))
+rbits <- function(size, p = 0.5, ...) {
+  if (length(p) > 1 && prod(size) != length(p)) {
+    stop("Number of probabilities does not match number of bits")
+  }
+
+  bits <- rbinom(prod(size), size = 1, prob = p)
+
+  if (length(size) == 1) {
+    bits
+  } else if (length(size) == 2) {
+    matrix(bits, nrow = size[[1]], ncol = size[[2]], byrow = TRUE, ...)
+  } else if (length(size) == 3) {
+    aperm(array(bits, dim = c(size[2], size[1], size[3]), ...), c(2, 1, 3))
+  }
 }
 
 #' Hamming distance of two vectors
@@ -28,9 +50,9 @@ rbits <- function(size, p = 0.5) {
 #'
 #' @param x A numeric or logical vector
 #' @param y A numeric or logical vector
-#' @param norm If `TRUE` (default is `FALSE`) normalize the distance to the vector length
+#' @param norm If `TRUE` normalize the distance to the vector length. By default it's `FALSE`
 #'
-#' @return The Hamming distance
+#' @returns The Hamming distance
 #'
 #' @export
 #' @examples
@@ -58,7 +80,7 @@ hamming_dist <- function(x, y, norm = FALSE) {
 #' @param v A logical or numeric vector
 #' @param norm If `TRUE` (default is `FALSE`) normalize the vector
 #'
-#' @return The Hamming weight
+#' @returns The Hamming weight
 #'
 #' @export
 #' @examples
@@ -87,7 +109,7 @@ hamming_weight <- function(v, norm = FALSE) {
 #'
 #' @param v A binary vector
 #'
-#' @return The ratio of bits in the binary vector
+#' @returns The ratio of bits in the binary vector
 #'
 #' @export
 #' @seealso [hamming_weight][pufr::hamming_weight]
@@ -105,58 +127,17 @@ ratio_bits <- function(v) {
   (2 * p_one) - 1
 }
 
+#' @rdname hamming_dist
+#' @export
+#' @examples
+#' c(0, 1, 0) %HD% c(1, 0, 0)
+"%HD%" <- function(x, y) hamming_dist(x, y, norm = FALSE)
 
 #' @rdname hamming_dist
 #' @export
 #' @examples
-#' c(0, 1, 0) %<>% c(1, 0, 0)
-"%<>%" <- function(x, y) hamming_dist(x, y, norm = FALSE)
-
-#' @rdname hamming_dist
-#' @export
-#' @examples
-#' c(0, 1, 0) %</>% c(1, 0, 0)
-"%</>%" <- function(x, y) hamming_dist(x, y, norm = TRUE)
-
-#' Automatic parallelization of apply
-#'
-#' Use [parallel::parApply] if a parallel context has been created with [register_parallel]. Otherwise use [base::apply].
-#'
-#' @param v Vector of values
-#' @param margin Vector giving the subscripts which the function will be applied over. E.g., for a matrix 1 indicates rows, 2 indicates columns, c(1, 2) indicates rows and columns. Where X has named dimnames, it can be a character vector selecting dimension names.
-#' @param fn Function to apply.
-#' @param ... Rest of arguments passed to `fn`.
-#'
-#' @returns Vector or array or list of values obtained by applying a function to margins of an array or matrix.
-#' @seealso [register_parallel], [parallel::parApply], [apply]
-#' @export
-par_apply <- function(v, margin, fn, ...) {
-  if (!is.null(pufr_env$ctx)) {
-    parallel::parApply(pufr_env$ctx, v, margin, fn, ...)
-  } else {
-    apply(v, margin, fn, ...)
-  }
-}
-
-#' Automatic parallelization of vapply
-#'
-#' Use [parallel::parApply] if a parallel context has been created with [register_parallel]. Otherwise use [base::apply].
-#'
-#' @param v Vector of values.
-#' @param fn Function to apply.
-#' @param value Expected type of value.
-#' @param ... Rest of arguments passed to `fn`.
-#'
-#' @returns Vector or array or list of values obtained by applying a function to margins of an array or matrix.
-#' @seealso [register_parallel], [parallel::parSapply], [vapply]
-#' @export
-par_vapply <- function(v, fn, value = NULL, ...) {
-  if (!is.null(pufr_env$ctx)) {
-    parallel::parSapply(pufr_env$ctx, v, fn, ...)
-  } else {
-    vapply(v, fn, value, ...)
-  }
-}
+#' c(0, 1, 0) %NHD% c(1, 0, 0)
+"%NHD%" <- function(x, y) hamming_dist(x, y, norm = TRUE)
 
 #' Compare a matrix by pairs of rows
 #'
@@ -172,7 +153,7 @@ par_vapply <- function(v, fn, value = NULL, ...) {
 #' @export
 #' @examples
 #' #' Compare a matrix by pairs of rows
-#' m <- matrix(rbits(25), 5, 5)
+#' m <- rbits(c(5, 5))
 #' res <- compare_pairwise(m, hamming_dist, norm = TRUE)
 #' res
 #' length(res) == (5 * 4 / 2)
@@ -182,10 +163,9 @@ par_vapply <- function(v, fn, value = NULL, ...) {
 #' all(uniqueness(m) == res)
 compare_pairwise <- function(m, fn, ...) {
   rows <- nrow(m)
-  # TODO: Usne RcppAlgos::comboGeneral to create the pairs
-  res <- sapply(seq(1, rows - 1), function(x) seq(x + 1, rows, 1))
-  idx <- mapply(c, unlist(res), rep(seq(1, rows - 1), seq(rows - 1, 1)), SIMPLIFY = TRUE)
-  par_apply(idx, 2, function(p) {
-    fn(m[p[1], ], m[p[2], ], ...)
-  })
+
+  pairs <- do.call(rbind, sapply(seq(1, rows - 1), function(i) {
+    cbind(rep(i, rows - i), seq(i + 1, rows))
+  }))
+  apply(t(pairs), 2, function(p) fn(m[p[1], ], m[p[2], ], ...))
 }

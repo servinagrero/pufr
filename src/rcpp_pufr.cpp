@@ -1,7 +1,8 @@
-#include <omp.h>
 #include <Rcpp.h>
 using namespace Rcpp;
 
+#include <omp.h>
+// [[Rcpp::plugins(openmp)]]
 
 //' Uniqueness of CRPs
 //'
@@ -15,14 +16,14 @@ using namespace Rcpp;
 //'
 //' @export
 //' @examples
-//' mat <- matrix(rbits(100), nrow = 10, ncol = 10)
+//' mat <- rbits(c(10, 10))
 //' uniqueness(mat)
 // [[Rcpp::export]]
 NumericVector uniqueness(const NumericMatrix &crps) {
   int n_devices = crps.rows();
   size_t npairs = (n_devices * (n_devices - 1)) / 2;
 
-  if (npairs > size_t(-1)) {
+  if (npairs >= SIZE_MAX) {
     throw std::invalid_argument("Number of pairs should be smaller than 2^32 - 1");
   }
 
@@ -32,8 +33,10 @@ NumericVector uniqueness(const NumericMatrix &crps) {
   Environment pufr("package:pufr");
   Function hamming_dist = pufr["hamming_dist"];
 
-  #pragma omp parallel collapse(2)
-  for (int i = 0; i < n_devices; ++i) {
+  // FIXME: For some reason parallel crashes the whole function
+  // #pragma omp parallel for shared(crps,pair_count) private(i,j)
+  #pragma omp for
+  for (int i = 0; i < n_devices - 1; ++i) {
     for (int j = i + 1; j < n_devices; ++j) {
       NumericVector hd = hamming_dist(_["x"] = crps.row(i),
                                       _["y"] = crps.row(j), _["norm"] = true);

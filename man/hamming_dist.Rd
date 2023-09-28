@@ -2,22 +2,22 @@
 % Please edit documentation in R/utils.R
 \name{hamming_dist}
 \alias{hamming_dist}
-\alias{\%<>\%}
-\alias{\%</>\%}
+\alias{\%HD\%}
+\alias{\%NHD\%}
 \title{Hamming distance of two vectors}
 \usage{
 hamming_dist(x, y, norm = FALSE)
 
-x \%<>\% y
+x \%HD\% y
 
-x \%</>\% y
+x \%NHD\% y
 }
 \arguments{
 \item{x}{A numeric or logical vector}
 
 \item{y}{A numeric or logical vector}
 
-\item{norm}{If \code{TRUE} (default is \code{FALSE}) normalize the distance to the vector length}
+\item{norm}{If \code{TRUE} normalize the distance to the vector length. By default it's \code{FALSE}}
 }
 \value{
 The Hamming distance
@@ -34,6 +34,6 @@ hamming_dist(c(0, 1, 0), c(0, 0, 0), norm = TRUE)
 
 ## NAs in any of the vectors are discarded
 hamming_dist(c(1, NA, 3, 4, 5), c(1, 2, NA, 4, 5))
-c(0, 1, 0) \%<>\% c(1, 0, 0)
-c(0, 1, 0) \%</>\% c(1, 0, 0)
+c(0, 1, 0) \%HD\% c(1, 0, 0)
+c(0, 1, 0) \%NHD\% c(1, 0, 0)
 }

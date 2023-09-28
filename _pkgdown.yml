@@ -6,25 +6,31 @@ template:
 reference:
   - title: Metrics
     desc: >
-      Calculate the metrics of some CRPs or a CRP table
+      Compute the quality metrics of PUF data
     contents:
-    - crps_weight
+    - metrics
+    - with_entropy
+    - dim.pufmetrics
+    - plot.pufmetrics
+  - title: Formulas
+    desc: >
+      Compute the metrics of bit vectors or CRP matrices
+    contents:
     - entropy_shannon
     - entropy_bits
     - entropy_p
+    - uniformity
+    - bitaliasing
     - intra_hd
     - reliability
     - inter_hd
     - uniqueness
   - title: Utilities
     docs: >
-      Utility functions
+      Utility functions to work with PUF responses
     contents:
     - hamming_dist
     - hamming_weight
     - ratio_bits
     - rbits
-    - par_apply
-    - par_vapply
-    - register_parallel
     - compare_pairwise

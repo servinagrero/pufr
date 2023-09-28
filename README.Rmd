@@ -1,0 +1,103 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# pufr <a href="https://servinagrero.github.io/pufr/"><img src="man/figures/logo.svg" align="right" height="139" /></a>
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test coverage](https://codecov.io/gh/servinagrero/pufr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/servinagrero/pufr?branch=main)
+<!-- badges: end -->
+
+## Overview
+
+Physical Unclonable Functions, commonly knows as PUFs, are a mechanism that leverages the manufacture variability of devices to generate secrets. PUFs can be used to identify devices or to generate secrets. This package provides functions and algorithms for their analysis and evaluation. The functions provided in this package are optimised to be fast enough for most use cases.
+
+A Python implementation can be found in [Github](https://github.com/servinagrero/pufrpy).
+
+You can learn more about PUFs and their evaluation in `vignette("pufr")`.
+
+## Installation
+
+You can install the development version of pufr from [GitHub](https://github.com/servinagrero/pufr) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("servinagrero/pufr")
+```
+
+## Basic functionality
+
+PUFR provides functions and operators to work both with bit vectors (vectors containing 1s and 0s) and CRPs matrices (2D or 3D matrices with 1s and 0s).
+
+```{r}
+library(pufr)
+
+# rbits can be used to generate bits with desired probabilities
+v1 <- rbits(50)
+v2 <- rbits(50)
+
+hamming_dist(v1, v2)
+# Or alternatively
+v1 %HD% v2
+
+# Shannon entropy for bit vectors
+entropy_bits(v1)
+```
+
+## Metrics
+
+PUFR provides utilities to calculate the canonical metrics (uniformity, bitaliasing, uniqueness and reliability) of CRPs. They can be calculated using their respective functions.
+
+
+```{r}
+# 5 devices with 10 challenges each
+crps <- rbits(c(5, 10))
+
+uniformity(crps)
+bitaliasing(crps)
+uniqueness(crps)
+
+# For a 2D matrix, each column contains a sample
+# In a 3D matrix, the 3rd dimension represents the samples
+# 5 samples of 5 devices with 10 challenges each
+crps <- rbits(c(5, 10, 5))
+reliability(crps)
+```
+
+All the metrics can be calculated at once by using the `metrics` function, which handles both 2D and 3D matrices.
+
+```{r}
+crps <- rbits(c(5, 10))
+met <- metrics(crps)
+```
+
+### Exploration of metrics
+
+Metrics created through the `metrics` function can be plotted and summarised easily.
+
+In the case of a 2D CRP matrix, 3 histograms are created, for uniformity, bitaliasing and uniqueness respectively.
+
+```{r}
+crps <- rbits(c(10, 100))
+plot(metrics(crps))
+```
+
+In the case of a 3D CRP matrix, response samples are drawn from the 3rd dimension. The histograms are now grouped per sample and an additional raster plot is created to show the reliability of each independent response.
+
+```{r}
+crps <- rbits(c(10, 100, 5))
+plot(metrics(crps))
+```
+

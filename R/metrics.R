@@ -1,178 +1,169 @@
-## usethis namespace: start
-#' @useDynLib pufr, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
-## usethis namespace: end
-NULL
+library(ggplot2)
+library(dplyr)
+library(cowplot)
+library(viridis)
 
-#' Shannon entropy for numeric values
+#' Compute the quality metrics of the given CRP matrix
 #'
-#' @description
-#' The Shannon entropy of a vector is calculated as:
-#' \deqn{H(X) := -\sum_{x \in \chi} p(x) \log p(x) = E[-\log p(x)]}
+#' @param crps A 2D or 3D CRP matrix
+#' @param with_entropy If `TRUE`, wrap the results of the metrics with the Shannon entropy. By default `FALSE`.
 #'
-#' @details
-#' When calculating the probabilities, it is assumed by convention that \eqn{(0\cdot \log 0 = 0)} and \eqn{(1 \cdot \log 1 = 1)}.
-#'
-#' @param v A vector of values
-#'
-#' @return The entropy of the vector
+#' @returns The calculated metrics in a `pufmetrics` object.
 #'
 #' @export
-entropy_shannon <- function(v) {
-  freqs <- table(v) / length(v)
-  -sum(freqs * log2(freqs))
-}
-
-#' Shannon entropy for binary vectors
-#'
-#' The probability \eqn{p(1)} corresponds to the normalized [hamming_weight] of the vector.
-#'
-#' @param v A binary vector
-#'
-#' @return The entropy of the vector
-#'
-#' @export
-#' @seealso [entropy_shannon][pufr::entropy_shannon]
 #' @examples
-#' entropy_bits(c(0, 0, 0))
-#' entropy_bits(c(1, 1, 1))
-#' entropy_bits(rbits(20))
-entropy_bits <- function(v) {
-  p_ones <- hamming_weight(v, norm = TRUE)
-  entropy_p(p_ones)
-}
+#' crps <- rbits(c(5, 50))
+#' metrics(crps)
+#'
+#' crps <- rbits(c(5, 50, 3))
+#' metrics(crps)
+metrics <- function(crps, with_entropy = FALSE) {
+  m <- structure(list(reliability = NA), class = "pufmetrics")
 
-#' Shannon entropy for probabilities
-#'
-#' @param v A vector of probabilities
-#'
-#' @return The Shannon entropy of each probability
-#'
-#' @seealso [entropy_shannon][pufr::entropy_shannon]
-#' @export
-entropy_p <- function(v) {
-  p_zero <- 1 - v
-  vals <- -((v * log2(v)) + (p_zero * log2(p_zero)))
-  ifelse(is.nan(vals), 0, vals)
-}
-
-
-#' Hamming weight of CRPs
-#'
-#' @description
-#' This function is a wrapper around [hamming_weight][pufr::hamming_weight] to be used on vectors and 2D matrix.
-#'
-#' This function assumes that if the CRPs are supplied in a 2D matrix, each row corresponds to a device and each column corresponds to a CRP. If another convetion is used, modify the parameter `margin` accordingly.
-#'
-#' @details
-#' ### Uniformity
-#'
-#' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, `margin` should be 1.
-#'
-#' \deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
-#'
-#' ### Bitaliasing
-#'
-#' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices. To calculate bitaliasing, `margin` should be 2.
-#'
-#' \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
-#'
-#' @param crps A binary vector or 2D matrix.
-#' @param margin The margin to calculate the Hamming weight. 1 for rows and 2 for columns.
-#'
-#' @return The Hamming weight of the CRPs
-#' @export
-#'
-#' @seealso [hamming_weight][pufr::hamming_weight]
-#' @examples
-#' ## Hamming weight of a binary vector
-#' v <- rbits(50)
-#' crps_weight(v)
-#'
-#' ## Uniformity of a set of CRPs
-#' mat <- matrix(rbits(500), nrow = 5, ncol = 10)
-#' crps_weight(mat, 1)
-#'
-#' ## Bitaliasing of a set of CRPs
-#' crps_weight(mat, 2)
-crps_weight <- function(crps, margin = 1) {
-  if (is.vector(crps)) {
-    return(hamming_weight(crps, norm = TRUE))
-  } else if (is.matrix(crps)) {
-    return(par_apply(crps, margin, hamming_weight, norm = TRUE))
+  if (is.matrix(crps)) {
+    m$uniformity <- pufr::uniformity(crps)
+    m$bitaliasing <- pufr::bitaliasing(crps)
+    m$uniqueness <- pufr::uniqueness(crps)
+  } else {
+    samples <- seq_len(dim(crps)[3])
+    m$uniformity <- lapply(samples, function(s) uniformity(crps[, , s]))
+    m$bitaliasing <- lapply(samples, function(s) bitaliasing(crps[, , s]))
+    m$uniqueness <- lapply(samples, function(s) uniqueness(crps[, , s]))
+    m$reliability <- pufr::reliability(crps)
   }
-  cli::cli_abort("crps needs to be a vector or a 2D matrix, not {.type {crps}}")
+  return(`if`(with_entropy, with_entropy(m), m))
 }
 
-#' Intra Hamming distance of CRPs
+
+#' Convert metrics to entropy calculation
 #'
-#' @description
-#' The intra Hamming distance of two sets of CRPs measures the numbers of CRPs that differ. N sets of CRPs are equal if their intra Hamming distances are 0.
+#' @param metrics A pufmetrics object
 #'
-#' A response is reliable if it does not change in time, thus, its intra Hamming distance is equal to 0.
+#' @returns The new pufmetrics object where the metrics have been passed to `entropy_p` description
 #'
-#' If `crps` is a 2D matrix, it is assumed that each row corresponds to a sample and each column to a CRP. The `ref_sample` will say which row is the sample taken as reference. In the case of a 3D matrix, each row corresponds to a device, each column to a CRP and each 3rd dimension to a different sample.
-#'
-#' @details
-#' The order of the samples is calculated as \code{setdiff(seq_len(nsamples), ref_sample)} where `nsamples` corresponds to \code{nrow(crps)} in the case of a 2D matrix and \code{dim(crps)[3]} in the case of a 3D matrix.
-#'
-#' @param crps A binary vector, 2D matrix or 3D array.
-#' @param ref_sample Numeric index for the reference sample: If `crps` is a vector, is the index of the reference sample; If `crps` is a 2D matrix, the row to use as reference; If `crps` is a 3D array,the row for all 3rd dimension matrix.
-#'
-#' @return If `crps` is a vector, the intra Hamming distance of the vector. If `crps` is a 2D matrix, the reliability of each column as a vector of size \code{ncol(crps) - 1}. If `crps` is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.
-#'
+#' @seealso [entropy_p][pufr::entropy_p]
 #' @export
-#' @seealso [hamming_dist][pufr::hamming_dist]
-#'
 #' @examples
-#' #' ## Bit values
-#' v <- c(1, 0, 0, 1, 1)
-#' intra_hd(v, 1)
-#'
-#' ## Set of CRPs
-#' mat <- matrix(rbits(50), nrow = 5, ncol = 10)
-#' intra_hd(mat, 1)
-#'
-#' ## Set of devices with their respective samples
-#' mat <- array(rbits(150), dim = c(5, 10, 3))
-#' intra_hd(mat)
-intra_hd <- function(crps, ref_sample = 1) {
-  if (is.vector(crps)) {
-    if (length(crps) == 1) {
-      return(1)
-    }
-    if (ref_sample < 1 || ref_sample > length(crps)) {
-      cli::cli_abort("ref_sample should be in the range [1, {length(crps)}]")
-    }
-    sample_ids <- setdiff(seq_along(crps), ref_sample)
-    helper <- function(i) {
-      hamming_dist(crps[ref_sample], crps[i], norm = TRUE)
-    }
-    return(mean(par_vapply(sample_ids, helper, numeric(1))))
-  } else if (is.matrix(crps)) {
-    return(par_apply(crps, 2, intra_hd, ref_sample))
-  } else if (is.array(crps)) {
-    return(t(par_apply(crps, 1, function(s) intra_hd(t(s), ref_sample))))
+#' crps <- rbits(c(5, 50))
+#' m <- metrics(crps)
+#' m
+#' with_entropy(m)
+with_entropy <- function(metrics) {
+  stopifnot(class(metrics) == "pufmetrics")
+
+  m <- metrics
+
+  if (dim(metrics)[3] == 1) {
+    m$uniformity <- entropy_p(metrics$uniformity)
+    m$bitaliasing <- entropy_p(metrics$bitaliasing)
+  } else {
+    m$uniformity <- lapply(metrics$uniformity, entropy_p)
+    m$bitaliasing <- lapply(metrics$bitaliasing, entropy_p)
   }
-  cli::cli_abort("crps should be a 2D matrix or 3D array, not {.type {crps}}")
+  m
 }
 
-#' Reliability of CRPs
+#' Create a plot with a summary of all the metrics
 #'
-#' The reliability is defined as \eqn{1 - Intra_{HD}}
-#' @inheritParams intra_hd
+#' If the metrics come from a 2D CRP table, 3 histograms are created for uniformity, bitaliasing and uniqueness.
+#'
+#' In the case of a 3D CRP table, 4 graphs are created, 3 histograms for uniformity, bitaliasing and uniqueness, combining all samples, and a matrix showing the reliability of each response.
+#'
+#' @param x The PUF metrics
+#' @param ... Additional parameters
+#'
 #' @export
-#' @seealso [intra_hd][pufr::intra_hd]
-#'
 #' @examples
-#' ## Set of CRPs
-#' mat <- matrix(rbits(200), nrow = 10, ncol = 20)
-#' intra <- intra_hd(mat, 1)
-#' all(1 - intra == reliability(mat, 1))
-reliability <- function(crps, ref_sample = 1) {
-  1 - intra_hd(crps, ref_sample)
+#' ## With a single sample
+#' crps <- rbits(c(5, 50))
+#' plot(metrics(crps))
+#'
+#' ## With multiple samples
+#' crps <- rbits(c(5, 50, 3))
+#' plot(metrics(crps))
+plot.pufmetrics <- function(x, ...) {
+  histogram <- function(x) {
+    df <- do.call(rbind, x) %>%
+      reshape2::melt() %>%
+      rename(sample = "Var1")
+    ggplot(df) +
+      geom_histogram(
+        aes(x = value, group = sample, fill = as.factor(sample)),
+        position = "dodge", bins = 10
+      ) +
+      scale_fill_viridis_d() +
+      scale_x_continuous(n.breaks = 10) +
+      coord_cartesian(xlim = c(0, 1)) +
+      labs(fill = "Sample")
+  }
+
+  if (is.matrix(x$reliability)) {
+    p_unif <- histogram(x$uniformity)
+    p_ba <- histogram(x$bitaliasing)
+    p_uniq <- histogram(x$uniqueness)
+
+    p_rel <- reshape2::melt(x$reliability) %>%
+      ggplot() +
+      geom_raster(aes(x = Var2, y = Var1, fill = value)) +
+      scale_fill_viridis() +
+      labs(x = "Challenge", y = "Device", fill = "Rel")
+
+    cowplot::plot_grid(
+      p_unif,
+      p_ba,
+      p_uniq,
+      p_rel,
+      labels = c("Uniformity", "Bitaliasing", "Uniqueness", "Reliability"),
+      ncol = 2, nrow = 2
+    )
+  } else {
+    plist <- lapply(
+      x[c("uniformity", "bitaliasing", "uniqueness")],
+      function(mat) {
+        data.frame(value = mat) %>%
+          ggplot() +
+          geom_histogram(aes(x = value), bins = 10) +
+          scale_x_continuous(n.breaks = 10) +
+          coord_cartesian(xlim = c(0, 1))
+      }
+    )
+
+    cowplot::plot_grid(
+      plotlist = plist,
+      labels = c("Uniformity", "Bitaliasing", "Uniqueness"),
+      ncol = 1
+    )
+  }
 }
 
-#' @rdname uniqueness
+#' Returns the dimensions of the metrics
+#'
+#' The dimensions are defined as the number of devices, number of challenges and number of samples. When only 1 sample has been used, the 3rd dimension defaults to 1.
+#'
+#' @param x The PUF metrics
+#'
+#' @returns The number of devices, challenges and samples from the metrics
+#'
 #' @export
-inter_hd <- uniqueness
+#' @examples
+#' crps <- rbits(c(5, 50))
+#' dim(metrics(crps))
+#'
+#' crps <- rbits(c(5, 50, 3))
+#' dim(metrics(crps))
+dim.pufmetrics <- function(x) {
+  if (is.matrix(x$reliability)) {
+    c(length(x$reliability), ncol(x$reliability), length(x$uniformity))
+  } else {
+    c(length(x$uniformity), length(x$bitaliasing), 1)
+  }
+}
+
+# report <- function(m, ...) {
+#   cli_rule("PUF Metrics")
+#   cli_text("Number of devices: {dim(m)[1]}")
+#   cli_text("Number of challenges: {dim(m)[2]}")
+#   if (length(dim(m)) == 3) {
+#     cli_text("Number of samples: {dim(m)[3]}")
+#   }
+# }
