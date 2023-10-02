@@ -149,23 +149,26 @@ ratio_bits <- function(v) {
 #' @param fn Function that receives two rows.
 #' @param ... Rest of arguments passed to `fn`.
 #'
-#' @returns Vector containing the results of all comparisons.
+#' @returns List containing the results of applying the function to each pair of rows.
 #' @export
 #' @examples
 #' #' Compare a matrix by pairs of rows
 #' m <- rbits(c(5, 5))
 #' res <- compare_pairwise(m, hamming_dist, norm = TRUE)
-#' res
+#' unlist(res)
 #' length(res) == (5 * 4 / 2)
 #'
 #' ## Equivalence to uniqueness
 #' res <- compare_pairwise(m, function(f, s) 1 - hamming_dist(f, s, norm = TRUE))
-#' all(uniqueness(m) == res)
+#' all(uniqueness(m) == unlist(res))
 compare_pairwise <- function(m, fn, ...) {
-  rows <- nrow(m)
+  pairs <- lapply(seq_len(nrow(m) - 1), function(i) {
+    len <- length(seq(i+1, nrow(m)))
+    mapply(c, rep(i, len), seq(i + 1, nrow(m)), SIMPLIFY=FALSE)
+  })
+  pairs <- unlist(pairs, recursive = FALSE)
 
-  pairs <- do.call(rbind, sapply(seq(1, rows - 1), function(i) {
-    cbind(rep(i, rows - i), seq(i + 1, rows))
-  }))
-  apply(t(pairs), 2, function(p) fn(m[p[1], ], m[p[2], ], ...))
+  lapply(pairs, function(p) fn(m[p[1], ], m[p[2], ], ...))
 }
+
+
