@@ -1,3 +1,9 @@
+# pufr 0.5.1
+
+* General fixes
+* Improved the test suite. This test suite will be used to check the proper behaviour of all the functions and will be used as the reference for the Python version.
+* Store names of the crps (devices, challenges and samples) when computing metrics
+
 # pufr 0.5.0
 
 * Make `rbits` create vector, matrix and array, for convenience purposes.
