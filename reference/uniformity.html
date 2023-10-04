@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">pufr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,7 +72,7 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, <code>margin</code> should be 1.</p>
-<p>$$Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c$$</p>
+<p>$$Uniformity(d) = \frac{1}{\#C} \sum_{r \in R_d} r$$</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -83,11 +83,11 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Uniformity of a vector</span></span></span>
 <span class="r-in"><span><span class="fu">uniformity</span><span class="op">(</span><span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Uniformity of a matrix</span></span></span>
 <span class="r-in"><span><span class="fu">uniformity</span><span class="op">(</span><span class="fu"><a href="rbits.html">rbits</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.54 0.66 0.50 0.52 0.54 0.56 0.42 0.52 0.52 0.36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.52 0.60 0.40 0.50 0.40 0.48 0.52 0.56 0.60 0.62</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
