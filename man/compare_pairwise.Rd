@@ -9,7 +9,7 @@ compare_pairwise(m, fn, ...)
 \arguments{
 \item{m}{Vector of values.}
 
-\item{fn}{Function that receives two rows.}
+\item{fn}{Function that receives two row vectors.}
 
 \item{...}{Rest of arguments passed to \code{fn}.}
 }
@@ -17,8 +17,7 @@ compare_pairwise(m, fn, ...)
 List containing the results of applying the function to each pair of rows.
 }
 \description{
-Each pair of rows is compared using the given function.
-The pairs are chosen without repetition.
+Each pair of rows is compared using the given function. The pairs are chosen without repetition.
 }
 \examples{
 #' Compare a matrix by pairs of rows

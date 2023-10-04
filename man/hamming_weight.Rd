@@ -19,7 +19,7 @@ The Hamming weight is the number of non null symbols in a vector.
 For a binary vector, it corresponds to the number of 1s.
 }
 \details{
-NAs are discarded in the vector.
+NAs are discarded in the vector by using \code{na.rm = TRUE} in \code{sum}.
 }
 \examples{
 ## Weight of the vector
