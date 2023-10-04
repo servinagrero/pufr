@@ -158,16 +158,14 @@ ratio_bits <- function(v) {
 #' length(res) == (5 * 4 / 2)
 #'
 #' ## Equivalence to uniqueness
-#' res <- compare_pairwise(m, function(f, s) 1 - hamming_dist(f, s, norm = TRUE))
+#' res <- compare_pairwise(m, hamming_dist, norm = TRUE)
 #' all(uniqueness(m) == unlist(res))
 compare_pairwise <- function(m, fn, ...) {
   pairs <- lapply(seq_len(nrow(m) - 1), function(i) {
-    len <- length(seq(i+1, nrow(m)))
-    mapply(c, rep(i, len), seq(i + 1, nrow(m)), SIMPLIFY=FALSE)
+    len <- length(seq(i + 1, nrow(m)))
+    mapply(c, rep(i, len), seq(i + 1, nrow(m)), SIMPLIFY = FALSE)
   })
   pairs <- unlist(pairs, recursive = FALSE)
 
   lapply(pairs, function(p) fn(m[p[1], ], m[p[2], ], ...))
 }
-
-

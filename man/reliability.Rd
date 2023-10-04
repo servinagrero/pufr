@@ -16,7 +16,7 @@ The reliability of a PUF is defined as \eqn{1 - Intra_{HD}}
 }
 \examples{
 ## Set of CRPs
-mat <- matrix(rbits(200), nrow = 10, ncol = 20)
+mat <- rbits(c(5, 10))
 intra <- intra_hd(mat, 1)
 all(1 - intra == reliability(mat, 1))
 }

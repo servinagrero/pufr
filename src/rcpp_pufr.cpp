@@ -40,7 +40,7 @@ NumericVector uniqueness(const NumericMatrix &crps) {
     for (int j = i + 1; j < n_devices; ++j) {
       NumericVector hd = hamming_dist(_["x"] = crps.row(i),
                                       _["y"] = crps.row(j), _["norm"] = true);
-      interHDs[pair_count++] = 1 - hd[0];
+      interHDs[pair_count++] = hd[0];
     }
   }
   return interHDs;

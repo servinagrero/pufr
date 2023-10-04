@@ -5,8 +5,9 @@
 #' @import ggplot2
 #' @import dplyr
 #' @import viridis
-#' @import cli
+#' @importFrom stringr str_pad
 #' @importFrom stats rbinom
+#' @importFrom stats sd
 #' @importFrom reshape2 melt
 ## usethis namespace: end
 NULL
@@ -158,9 +159,7 @@ bitaliasing <- function(crps) {
 #' intra_hd(mat)
 intra_hd <- function(crps, ref = 1) {
   compare_with_ref <- function(x, ref = 1) {
-    if (!(ref >= 1 & ref <= length(x))) {
-      cli::cli_abort("ref_sample should be in the range [1, {length(x)}]")
-    }
+    stopifnot("ref_sample is outside the range of samples" = ref >= 1 & ref <= length(x))
     1 - bitwXor(x[ref], x[setdiff(seq_along(x), ref)])
   }
 
@@ -188,7 +187,7 @@ intra_hd <- function(crps, ref = 1) {
 #'
 #' @examples
 #' ## Set of CRPs
-#' mat <- matrix(rbits(200), nrow = 10, ncol = 20)
+#' mat <- rbits(c(5, 10))
 #' intra <- intra_hd(mat, 1)
 #' all(1 - intra == reliability(mat, 1))
 reliability <- function(crps, ref = 1) {

@@ -27,6 +27,6 @@ unlist(res)
 length(res) == (5 * 4 / 2)
 
 ## Equivalence to uniqueness
-res <- compare_pairwise(m, function(f, s) 1 - hamming_dist(f, s, norm = TRUE))
+res <- compare_pairwise(m, hamming_dist, norm = TRUE)
 all(uniqueness(m) == unlist(res))
 }
