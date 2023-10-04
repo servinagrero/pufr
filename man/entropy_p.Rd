@@ -7,7 +7,7 @@
 entropy_p(v)
 }
 \arguments{
-\item{v}{A vector of probabilities where each probability is treated as P(1)}
+\item{v}{A vector of probabilities where each value is treated as the probability of success or P(1)}
 }
 \value{
 The Shannon entropy of each probability

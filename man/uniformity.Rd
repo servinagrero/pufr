@@ -18,7 +18,7 @@ This function assumes that if the CRPs are supplied in a 2D matrix, each row cor
 \details{
 Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, \code{margin} should be 1.
 
-\deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
+\deqn{Uniformity(d) = \frac{1}{\#C} \sum_{r \in R_d} r}
 }
 \examples{
 ## Uniformity of a vector

@@ -9,25 +9,24 @@ compare_pairwise(m, fn, ...)
 \arguments{
 \item{m}{Vector of values.}
 
-\item{fn}{Function that receives two rows.}
+\item{fn}{Function that receives two row vectors.}
 
 \item{...}{Rest of arguments passed to \code{fn}.}
 }
 \value{
-Vector containing the results of all comparisons.
+List containing the results of applying the function to each pair of rows.
 }
 \description{
-Each pair of rows is compared using the given function.
-The pairs are chosen without repetition.
+Each pair of rows is compared using the given function. The pairs are chosen without repetition.
 }
 \examples{
 #' Compare a matrix by pairs of rows
 m <- rbits(c(5, 5))
 res <- compare_pairwise(m, hamming_dist, norm = TRUE)
-res
+unlist(res)
 length(res) == (5 * 4 / 2)
 
 ## Equivalence to uniqueness
 res <- compare_pairwise(m, function(f, s) 1 - hamming_dist(f, s, norm = TRUE))
-all(uniqueness(m) == res)
+all(uniqueness(m) == unlist(res))
 }

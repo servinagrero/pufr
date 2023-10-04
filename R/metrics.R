@@ -20,15 +20,18 @@ library(viridis)
 metrics <- function(crps, with_entropy = FALSE) {
   m <- structure(list(reliability = NA), class = "pufmetrics")
 
+  m$devices <- `if`(is.null(rownames(crps)), seq_len(nrow(crps)), rownames(crps))
+  m$challenges <- `if`(is.null(colnames(crps)), seq_len(ncol(crps)), colnames(crps))
+
   if (is.matrix(crps)) {
-    m$uniformity <- pufr::uniformity(crps)
-    m$bitaliasing <- pufr::bitaliasing(crps)
+    m$uniformity <- as.vector(pufr::uniformity(crps))
+    m$bitaliasing <- as.vector(pufr::bitaliasing(crps))
     m$uniqueness <- pufr::uniqueness(crps)
   } else {
-    samples <- seq_len(dim(crps)[3])
-    m$uniformity <- lapply(samples, function(s) uniformity(crps[, , s]))
-    m$bitaliasing <- lapply(samples, function(s) bitaliasing(crps[, , s]))
-    m$uniqueness <- lapply(samples, function(s) uniqueness(crps[, , s]))
+    m$samples <- `if`(is.null(dimnames(crps)[3]), seq_len(dim(crps)[3]), dimnames(crps)[[3]])
+    m$uniformity <- lapply(m$samples, function(s) as.vector(uniformity(crps[, , s])))
+    m$bitaliasing <- lapply(m$samples, function(s) as.vector(bitaliasing(crps[, , s])))
+    m$uniqueness <- lapply(m$samples, function(s) as.vector(uniqueness(crps[, , s])))
     m$reliability <- pufr::reliability(crps)
   }
   return(`if`(with_entropy, with_entropy(m), m))
@@ -60,7 +63,7 @@ with_entropy <- function(metrics) {
     m$uniformity <- lapply(metrics$uniformity, entropy_p)
     m$bitaliasing <- lapply(metrics$bitaliasing, entropy_p)
   }
-  m
+  return(m)
 }
 
 #' Create a plot with a summary of all the metrics
@@ -153,17 +156,8 @@ plot.pufmetrics <- function(x, ...) {
 #' dim(metrics(crps))
 dim.pufmetrics <- function(x) {
   if (is.matrix(x$reliability)) {
-    c(length(x$reliability), ncol(x$reliability), length(x$uniformity))
+    c(nrow(x$reliability), ncol(x$reliability), length(x$uniformity))
   } else {
     c(length(x$uniformity), length(x$bitaliasing), 1)
   }
 }
-
-# report <- function(m, ...) {
-#   cli_rule("PUF Metrics")
-#   cli_text("Number of devices: {dim(m)[1]}")
-#   cli_text("Number of challenges: {dim(m)[2]}")
-#   if (length(dim(m)) == 3) {
-#     cli_text("Number of samples: {dim(m)[3]}")
-#   }
-# }

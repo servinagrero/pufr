@@ -20,7 +20,7 @@ Like \code{Unformity}, this function assumes that the CRPs are supplied in a 2D 
 
 Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices.
 
-\deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
+\deqn{Bitaliasing(c) = \frac{1}{\#D} \sum_{d \in D} r_c}
 }
 \examples{
 ## Bitaliasing of a matrix

@@ -55,7 +55,7 @@ entropy_bits <- function(v) {
 
 #' Shannon entropy for probabilities
 #'
-#' @param v A vector of probabilities where each probability is treated as P(1)
+#' @param v A vector of probabilities where each value is treated as the probability of success or P(1)
 #'
 #' @returns The Shannon entropy of each probability
 #'
@@ -74,7 +74,7 @@ entropy_p <- function(v) {
 #' @details
 #' Uniformity measures the distribution of 1s and 0s across all CRPs for each device. To calculate uniformity, `margin` should be 1.
 #'
-#' \deqn{Uniformity = \frac{1}{\#C} \sum_{c = 0}^{\#C} crp_c}
+#' \deqn{Uniformity(d) = \frac{1}{\#C} \sum_{r \in R_d} r}
 #'
 #' @param crps A bit vector or a 2D CRP matrix
 #'
@@ -106,7 +106,7 @@ uniformity <- function(crps) {
 #' @details
 #' Bitaliasing measures the distribution of 1s and 0s for a single CRPs across all devices.
 #'
-#' \deqn{Bitaliasing = \frac{1}{\#D} \sum_{d = 0}^{\#D} crp_d}
+#' \deqn{Bitaliasing(c) = \frac{1}{\#D} \sum_{d \in D} r_c}
 #'
 #' @param crps A bit vector or a 2D CRP matrix
 #'
@@ -129,13 +129,13 @@ bitaliasing <- function(crps) {
 #'
 #' A response is reliable if it does not change in time, thus, its intra Hamming distance is equal to 0.
 #'
-#' If `crps` is a 2D matrix, it is assumed that each row corresponds to a sample and each column to a CRP. The `ref_sample` will say which row is the sample taken as reference. In the case of a 3D matrix, each row corresponds to a device, each column to a CRP and each 3rd dimension to a different sample.
+#' If `crps` is a 2D matrix, it is assumed that each row corresponds to a sample and each column to a CRP. The `ref_sample` will dictate which row is the sample taken as reference. In the case of a 3D matrix, each row corresponds to a device, each column to a CRP and the 3rd dimension represents the different samples.
 #'
 #' @details
 #' The order of the samples is calculated as \code{setdiff(seq_len(nsamples), ref_sample)} where `nsamples` corresponds to \code{nrow(crps)} in the case of a 2D matrix and \code{dim(crps)[3]} in the case of a 3D matrix.
 #'
 #' @param crps A binary vector, 2D matrix or 3D array.
-#' @param ref Numeric index for the reference sample: If `crps` is a vector, is the index of the reference sample; If `crps` is a 2D matrix, the row to use as reference; If `crps` is a 3D array,the row for all 3rd dimension matrix.
+#' @param ref Numeric index for the reference sample: If `crps` is a vector, is the index of the reference sample; If `crps` is a 2D matrix, the row to use as reference; If `crps` is a 3D array, the row for all 3rd dimension matrix.
 #'
 #' @returns If `crps` is a vector, the intra Hamming distance of the vector. If `crps` is a 2D matrix, the reliability of each column as a vector of size \code{ncol(crps) - 1}. If `crps` is a 3D array, a 2D matrix where each row contains the intra Hamming distance all samples.
 #'

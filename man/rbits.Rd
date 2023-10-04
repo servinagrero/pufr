@@ -17,7 +17,7 @@ rbits(size, p = 0.5, ...)
 The generated bit vector
 }
 \description{
-This function is a wrapper around \link{sample} to generate bit vectors. The matrix and array version are creating by row.
+This function is a wrapper around \link{rbinom} to generate bit vectors. The matrix and array version are creating by row.
 }
 \examples{
 ## Unbiased probabilities

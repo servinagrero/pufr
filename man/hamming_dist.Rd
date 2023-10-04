@@ -26,7 +26,7 @@ The Hamming distance
 The Hamming distance of two vectors corresponds to the number of positions where the values differ.
 }
 \details{
-NAs are discarded in any of the vectors.
+NAs are discarded in any of the vectors by using \code{na.rm = TRUE} in \code{sum}.
 }
 \examples{
 hamming_dist(c(0, 1, 0), c(0, 0, 0))
