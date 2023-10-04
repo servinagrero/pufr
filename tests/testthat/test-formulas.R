@@ -86,6 +86,6 @@ test_that("uniqueness provides all results", {
 
 test_that("compare_pairwise behaves like uniqueness", {
   m <- rbits(c(5, 10))
-  fn <- function(x, y) 1 - hamming_dist(x, y, TRUE)
+  fn <- function(x, y) hamming_dist(x, y, TRUE)
   expect_true(all(uniqueness(m) == compare_pairwise(m, fn)))
 })

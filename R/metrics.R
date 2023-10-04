@@ -161,3 +161,58 @@ dim.pufmetrics <- function(x) {
     c(length(x$uniformity), length(x$bitaliasing), 1)
   }
 }
+
+
+#' Returns the length of the metrics
+#'
+#' The length of the metrics corresponds to the total number of responses
+#'
+#' @param x The PUF metrics
+#'
+#' @returns The total number of responses
+#'
+#' @export
+#' @examples
+#' crps <- rbits(c(5, 10))
+#' length(metrics(crps))
+#'
+#' crps <- rbits(c(5, 10, 3))
+#' length(metrics(crps))
+length.pufmetrics <- function(x) {
+  prod(dim(x))
+}
+
+
+#' Create a summary of the metrics
+#'
+#' @param object The PUF metrics
+#' @param ... Rest of the parameters
+#'
+#' @returns The total number of responses
+#'
+#' @export
+#' @examples
+#' arr <- rbits(c(5, 10, 3))
+#' summary(metrics(arr))
+summary.pufmetrics <- function(object, ...) {
+  pad <- function(x, width = 15) stringr::str_pad(x, width = width, side = "right")
+  dims <- sprintf("%3d", dim(object))
+  cat(pad("Number of devices:", 22), dims[1], "\n")
+  cat(pad("Number of challenges:", 22), dims[2], "\n")
+  cat(pad("Number of samples:", 22), dims[3], "\n\n")
+
+  header <- str_pad(c("Min", "Mean", "SD", "Max"), width = 5, side = "left")
+  cat("               ", header, "\n")
+  mysum <- function(name, x) {
+    x <- `if`(is.list(x), x[[1]], x)
+    vals <- sprintf("%#.3f", c(min(x), mean(x), sd(x), max(x)))
+    cat(pad(name), vals, "\n")
+  }
+
+  mysum("Uniformity:", object$uniformity)
+  mysum("Bitaliasing:", object$bitaliasing)
+  mysum("Uniqueness:", object$uniqueness)
+  if (is.matrix(object$reliability)) {
+    mysum("Reliability:", object$reliability)
+  }
+}
