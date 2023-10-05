@@ -9,6 +9,7 @@
 #' @importFrom stats rbinom
 #' @importFrom stats sd
 #' @importFrom reshape2 melt
+#' @importFrom abind abind
 ## usethis namespace: end
 NULL
 

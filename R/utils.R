@@ -169,3 +169,82 @@ compare_pairwise <- function(m, fn, ...) {
 
   lapply(pairs, function(p) fn(m[p[1], ], m[p[2], ], ...))
 }
+
+#' Convert a 2D CRP matrix or 3D CRP array to a dataframe
+#'
+#' @param crps A 2D CRP matrix or 3D CRP array
+#'
+#' @returns A dataframe with the columns `device`, `challenge` and `response` if `crps` is a 2D matrix. If `crps` is a 3D array, an additional column `sample` is added corresponding to the 3rd dimension.
+#'
+#' @export
+#' @examples
+#' ## CRP matrix
+#' crps <- rbits(c(2, 5))
+#' crps_to_df(crps)
+#'
+#' ## CRP array
+#' crps <- rbits(c(2, 5, 3))
+#' crps_to_df(crps)
+crps_to_df <- function(crps) {
+  mat_to_df <- function(m) {
+    reshape2::melt(m) %>%
+      rename(device = "Var1", challenge = "Var2", response = "value") %>%
+      arrange(device, challenge)
+  }
+
+  if (is.matrix(crps)) {
+    return(mat_to_df(crps))
+  }
+  samples <- seq_len(dim(crps)[3])
+  arr <- lapply(samples, function(s) mutate(mat_to_df(crps[, , s]), sample = s))
+  do.call(rbind, arr)
+}
+
+#' Convert a data frame to a CRP matrix
+#'
+#' The dataframe needs to contain the columns `device`, `challenge` and `response`. The column `sample` is optional and if found, will be used to create a 3D array. Other additional columns are ignored.
+#'
+#' @param df The dataframe with columns `device`, `challenge`, `response` and optional `sample`
+#'
+#' @return If the column `sample` is in the data frame, a 3D array. If not, a 2D matrix.
+#'
+#' @export
+#' @examples
+#' ## Dataframe without samples
+#' df <- expand.grid(device = 1:2, challenge = 1:5)
+#' df$response <- rbits(2 * 5)
+#' df_to_crps(df)
+#'
+#' ## Dataframe with samples
+#' df <- expand.grid(device = 1:2, challenge = 1:5, sample = 1:3)
+#' df$response <- rbits(2 * 5 * 3)
+#' df_to_crps(df)
+df_to_crps <- function(df) {
+  req_names <- c("device", "challenge", "response")
+  missing <- !(req_names %in% names(df))
+  if (any(missing)) {
+    names <- paste0(req_names[missing], collapse = ", ")
+    stop(paste("The columns", names, "are missing on the dataframe"))
+  }
+
+  devs <- unique(df$device)
+  challenges <- unique(df$challenge)
+  mat_fn <- function(x) {
+    m <- matrix(x, nrow = length(devs), ncol = length(challenges), byrow = TRUE)
+    return(m)
+  }
+
+  if (!"sample" %in% names(df)) {
+    return(mat_fn(df$response))
+  }
+
+  arr <- df %>%
+    arrange(sample, device, challenge) %>%
+    group_by(sample) %>%
+    group_map(function(x, ...) mat_fn(x$response)) %>%
+    abind::abind(along = 3)
+
+  # TODO: Only assign names if non numeric
+  # dimnames(arr) <- list(devs, challenges, unique(df$sample))
+  arr
+}

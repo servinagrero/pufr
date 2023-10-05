@@ -19,7 +19,8 @@ Imports:
     viridis,
     reshape2,
     cli,
-    stringr
+    stringr,
+    abind
 LinkingTo: Rcpp
 RoxygenNote: 7.2.3
 Enhances: parallel

@@ -12,6 +12,8 @@ reference:
     - with_entropy
     - dim.pufmetrics
     - plot.pufmetrics
+    - length.pufmetrics
+    - summary.pufmetrics
   - title: Formulas
     desc: >
       Compute the metrics of bit vectors or CRP matrices
@@ -34,3 +36,5 @@ reference:
     - ratio_bits
     - rbits
     - compare_pairwise
+    - crps_to_df
+    - df_to_crps
