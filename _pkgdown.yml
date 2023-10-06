@@ -35,6 +35,7 @@ reference:
     - hamming_weight
     - ratio_bits
     - rbits
+    - equal_to_idx
     - compare_pairwise
     - crps_to_df
     - df_to_crps

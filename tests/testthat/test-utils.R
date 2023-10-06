@@ -35,6 +35,18 @@ test_that("compare_pairwise creates all pairs of rows", {
   expect_equal(length(res), npairs)
 })
 
+test_that("equal_to_idx works properly", {
+  x <- rbits(100)
+  res <- equal_to_idx(x)
+  expect_lt(abs(0.5 - mean(res)), 0.1)
+
+  x <- rep(1, 100)
+  expect_true(all(equal_to_idx(x) == 1))
+
+  expect_error(equal_to_idx(rbits(5), 10))
+  expect_error(equal_to_idx(rbits(5), -2))
+})
+
 test_that("crps_to_df works properly", {
   arr <- rbits(c(5, 20, 3))
   df <- crps_to_df(arr)
@@ -42,10 +54,9 @@ test_that("crps_to_df works properly", {
   expect_equal(length(unique(df$challenge)), dim(arr)[2])
   expect_equal(length(unique(df$sample)), dim(arr)[3])
 
-  bits <- unlist(lapply(seq_len(dim(arr)[3]), function(s) as.vector(t(arr[,,s]))))
+  bits <- unlist(lapply(seq_len(dim(arr)[3]), function(s) as.vector(t(arr[, , s]))))
   expect_true(is.data.frame(df))
   expect_equal(df$response, bits)
-
 })
 
 test_that("conversion from df to crps is reversible", {

@@ -124,6 +124,23 @@ bitaliasing <- function(crps) {
   apply(crps, 2, hamming_weight, norm = TRUE)
 }
 
+
+#' Compare all values in a vector to the reference index
+#'
+#' @param x A numeric or binary vector
+#' @param ref The index of the value used as reference. By default `1`.
+#'
+#' @returns A numeric vector containing 1 in the positions with equal values to the reference and 0 otherwise.
+#' @export
+#' @examples
+#' v <- rbits(10)
+#' v
+#' equal_to_idx(v, 1)
+equal_to_idx <- function(x, ref = 1) {
+  stopifnot("ref is outside the range" = ref >= 1 & ref <= length(x))
+  as.numeric(x == x[ref])[-ref]
+}
+
 #' Intra Hamming distance of CRPs
 #'
 #' @description
@@ -159,21 +176,16 @@ bitaliasing <- function(crps) {
 #' mat <- rbits(c(5, 10, 3))
 #' intra_hd(mat)
 intra_hd <- function(crps, ref = 1) {
-  compare_with_ref <- function(x, ref = 1) {
-    stopifnot("ref_sample is outside the range of samples" = ref >= 1 & ref <= length(x))
-    1 - bitwXor(x[ref], x[setdiff(seq_along(x), ref)])
-  }
-
   if (is.vector(crps)) {
-    return(compare_with_ref(crps, ref))
+    return(equal_to_idx(crps, ref))
   }
 
   if (is.matrix(crps)) {
-    return(apply(crps, 2, function(x) compare_with_ref(x, ref)))
+    return(apply(crps, 2, function(x) equal_to_idx(x, ref)))
   }
 
   if (is.array(crps)) {
-    return(apply(crps, c(1, 2), function(x) mean(compare_with_ref(x, ref))))
+    return(apply(crps, c(1, 2), function(x) mean(equal_to_idx(x, ref))))
   }
 
   return(1)
